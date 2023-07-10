@@ -1,0 +1,26 @@
+{
+  "name": "inline-attachment",
+  "version": "0.0.0",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/inline-attachment.umd.cjs",
+  "module": "./dist/inline-attachment.js",
+  "exports": {
+    ".": {
+      "import": "./dist/inline-attachment.js",
+      "require": "./dist/inline-attachment.umd.cjs"
+    }
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@types/node": "^20.4.1",
+    "typescript": "^5.0.2",
+    "vite": "^4.4.0"
+  }
+}
