@@ -104,3 +104,5 @@ export const DEFAULT_OPTIONS = {
    */
   onFileUploaded() {},
 };
+
+export default DEFAULT_OPTIONS;

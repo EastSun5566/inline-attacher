@@ -1,4 +1,3 @@
-import { Utils } from './utils';
 import { DEFAULT_OPTIONS } from './constants';
 
 import { Editor, InlineAttachmentOptions } from './types';
@@ -23,7 +22,7 @@ export class InlineAttachment {
    * @param  {Blob} file blob data received from event.dataTransfer object
    * @return {XMLHttpRequest} request object which sends the file
    */
-  public uploadFile(file) {
+  public uploadFile(file: File) {
     const formData = new FormData();
     const xhr = new XMLHttpRequest();
     const settings = this.options;
@@ -89,10 +88,8 @@ export class InlineAttachment {
 
   /**
    * Returns if the given file is allowed to handle
-   *
-   * @param {File} file clipboard data file
    */
-  public isFileAllowed(file): boolean {
+  public isFileAllowed(file: File): boolean {
     if (file.kind === 'string') {
       return false;
     }
@@ -174,9 +171,7 @@ export class InlineAttachment {
   }
 
   /**
-   * Called when a paste event occured
-   * @param  {Event} e
-   * @return {Boolean} if the event was handled
+   * Called when a paste event occurred
    */
   public onPaste(event: ClipboardEvent) {
     event.preventDefault();
@@ -186,6 +181,7 @@ export class InlineAttachment {
     Array.from(event.clipboardData.files).forEach((file) => {
       if (this.isFileAllowed(file)) {
         result = true;
+
         this.onFileInserted(file);
         this.uploadFile(file);
       }
@@ -195,23 +191,24 @@ export class InlineAttachment {
   }
 
   /**
-   * Called when a drop event occures
-   * @param  {Event} e
-   * @return {Boolean} if the event was handled
+   * Called when a drop event occurred
    */
-  public onDrop(e) {
+  public onDrop(event: DragEvent) {
+    event.preventDefault();
+    if (!event.dataTransfer?.files.length) return false;
+
     let result = false;
-
-    for (let i = 0; i < e.dataTransfer.files.length; i++) {
-      const file = e.dataTransfer.files[i];
-
+    Array.from(event.dataTransfer.files).forEach((file) => {
       if (this.isFileAllowed(file)) {
         result = true;
+
         this.onFileInserted(file);
         this.uploadFile(file);
       }
-    }
+    });
 
     return result;
   }
 }
+
+export default InlineAttachment;

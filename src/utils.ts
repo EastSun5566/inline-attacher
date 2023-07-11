@@ -87,3 +87,5 @@ export class Utils {
     el.scrollTop = scrollPos;
   }
 }
+
+export default Utils;
