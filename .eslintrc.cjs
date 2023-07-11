@@ -26,5 +26,6 @@ module.exports = {
     project: './tsconfig.eslint.json',
   },
   rules: {
+    'max-classes-per-file': 'off',
   },
 };

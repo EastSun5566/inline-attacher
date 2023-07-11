@@ -6,7 +6,7 @@ export interface InlineAttachmentOptions {
   jsonFieldName: string
   allowedTypes: string[]
   progressText: string
-  urlText: string | (() => string)
+  urlText: string | ((filename: string, result: string) => string)
   errorText: string
   extraParams: { [name: string]: any }
   extraHeaders: { [name: string]: any }
@@ -14,9 +14,9 @@ export interface InlineAttachmentOptions {
   setupFormData?: (formData: FormData, file: File) => void
   remoteFilename?: (file: File) => string
   onFileReceived?: (file: File) => boolean
-  onFileUploadResponse?: () => boolean
-  onFileUploadError?: () => boolean
-  onFileUploaded?: () => void
+  onFileUploadResponse?: (xhr: XMLHttpRequest) => boolean
+  onFileUploadError?: (xhr: XMLHttpRequest) => boolean
+  onFileUploaded?: (filename: string) => void
 }
 
 export interface Editor {

@@ -96,20 +96,20 @@ export class InlineAttachment {
       return;
     }
 
-    if (this.options.onFileUploadResponse.call(this, xhr) !== false) {
+    if (this.options.onFileUploadResponse(xhr) !== false) {
       const result = JSON.parse(xhr.responseText);
       const filename = result[this.options.jsonFieldName];
 
       if (result && filename) {
         let newValue;
         if (typeof this.options.urlText === 'function') {
-          newValue = this.options.urlText.call(this, filename, result);
+          newValue = this.options.urlText(filename, result);
         } else {
           newValue = this.options.urlText.replace(this.filenameTag, filename);
         }
         const text = this.editor.getValue().replace(this.lastValue, newValue);
         this.editor.setValue(text);
-        this.options.onFileUploaded && this.options.onFileUploaded.call(this, filename);
+        this.options.onFileUploaded?.(filename);
       }
     }
   }
@@ -126,7 +126,7 @@ export class InlineAttachment {
       return;
     }
 
-    if (this.options.onFileUploadError.call(this, xhr) !== false) {
+    if (this.options.onFileUploadError(xhr) !== false) {
       const text = this.editor.getValue().replace(this.lastValue, this.options.errorText);
       this.editor.setValue(text);
     }
