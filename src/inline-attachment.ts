@@ -1,20 +1,18 @@
 import { Utils } from "./utils";
 import {DEFAULT_OPTIONS} from "./constants";
 
-import { IEditor, InlineAttachmentSettings } from './types';
+import { Editor, InlineAttachmentOptions } from './types';
 
 export class InlineAttachment {
-  private settings: InlineAttachmentSettings
-  private editor: IEditor
-  private filenameTag: string
-  private lastValue: string | null
+  private options: Partial<InlineAttachmentOptions> = DEFAULT_OPTIONS
+  private editor: Editor
+  private filenameTag = '{filename}'
+  private lastValue = ''
 
-  constructor(instance: IEditor, options: Partial<InlineAttachmentSettings>)
+  constructor(editor: Editor, options: Partial<InlineAttachmentOptions>)
   {
-    this.settings = Utils.merge(options, DEFAULT_OPTIONS as Partial<InlineAttachmentSettings>);
-    this.editor = instance;
-    this.filenameTag = '{filename}';
-    this.lastValue = null;
+    this.editor = editor;
+    this.options = { ...DEFAULT_OPTIONS, ...options }
   }
 
   /**
@@ -27,7 +25,7 @@ export class InlineAttachment {
   {
     const formData = new FormData();
     const xhr = new XMLHttpRequest();
-    const settings = this.settings;
+    const settings = this.options;
 
     let extension = settings.defaultExtension;
 
@@ -98,10 +96,10 @@ export class InlineAttachment {
     if (file.kind === 'string') {
       return false;
     }
-    if (this.settings.allowedTypes.indexOf('*') === 0) {
+    if (this.options.allowedTypes.indexOf('*') === 0) {
       return true;
     } else {
-      return this.settings.allowedTypes.indexOf(file.type) >= 0;
+      return this.options.allowedTypes.indexOf(file.type) >= 0;
     }
   }
 
@@ -113,7 +111,7 @@ export class InlineAttachment {
    */
   public onFileUploadResponse(xhr)
   {
-    if (!this.settings.onFileUploadResponse) {
+    if (!this.options.onFileUploadResponse) {
       return
     }
 
@@ -121,20 +119,20 @@ export class InlineAttachment {
       return;
     }
 
-    if (this.settings.onFileUploadResponse.call(this, xhr) !== false) {
+    if (this.options.onFileUploadResponse.call(this, xhr) !== false) {
       var result = JSON.parse(xhr.responseText),
-        filename = result[this.settings.jsonFieldName];
+        filename = result[this.options.jsonFieldName];
 
       if (result && filename) {
         var newValue;
-        if (typeof this.settings.urlText === 'function') {
-          newValue = this.settings.urlText.call(this, filename, result);
+        if (typeof this.options.urlText === 'function') {
+          newValue = this.options.urlText.call(this, filename, result);
         } else {
-          newValue = this.settings.urlText.replace(this.filenameTag, filename);
+          newValue = this.options.urlText.replace(this.filenameTag, filename);
         }
         var text = this.editor.getValue().replace(this.lastValue, newValue);
         this.editor.setValue(text);
-        this.settings.onFileUploaded && this.settings.onFileUploaded.call(this, filename);
+        this.options.onFileUploaded && this.options.onFileUploaded.call(this, filename);
       }
     }
   }
@@ -148,7 +146,7 @@ export class InlineAttachment {
    */
   public onFileUploadError(xhr)
   {
-    if (!this.settings.onFileUploadError) {
+    if (!this.options.onFileUploadError) {
       return;
     }
 
@@ -156,8 +154,8 @@ export class InlineAttachment {
       return;
     }
 
-    if (this.settings.onFileUploadError.call(this, xhr) !== false) {
-      const text = this.editor.getValue().replace(this.lastValue, this.settings.errorText);
+    if (this.options.onFileUploadError.call(this, xhr) !== false) {
+      const text = this.editor.getValue().replace(this.lastValue, this.options.errorText);
       this.editor.setValue(text);
     }
   }
@@ -170,12 +168,12 @@ export class InlineAttachment {
    */
   public onFileInserted(file)
   {
-    if (!this.settings.onFileReceived) {
+    if (!this.options.onFileReceived) {
       return;
     }
 
-    if (this.settings.onFileReceived.call(this, file) !== false) {
-      this.lastValue = this.settings.progressText;
+    if (this.options.onFileReceived.call(this, file) !== false) {
+      this.lastValue = this.options.progressText;
       this.editor.insertValue(this.lastValue);
     }
   }
@@ -186,29 +184,18 @@ export class InlineAttachment {
    * @param  {Event} e
    * @return {Boolean} if the event was handled
    */
-  public onPaste(e)
-  {
-    const clipboardData = e.clipboardData;
+  public onPaste(event: ClipboardEvent) {
+    event.preventDefault();
+    if (!event.clipboardData?.files.length) return false
+
     let result = false;
-    let items;
-
-    if (typeof clipboardData === "object") {
-      items = clipboardData.items || clipboardData.files || [];
-
-      for (let i = 0; i < items.length; i++) {
-        const item = items[i];
-
-        if (this.isFileAllowed(item)) {
+    Array.from(event.clipboardData.files).forEach((file) => {
+          if (this.isFileAllowed(file)) {
           result = true;
-          this.onFileInserted(item.getAsFile());
-          this.uploadFile(item.getAsFile());
+          this.onFileInserted(file);
+          this.uploadFile(file);
         }
-      }
-    }
-
-    if (result) {
-      e.preventDefault();
-    }
+      })
 
     return result;
   }

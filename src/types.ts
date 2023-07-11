@@ -1,4 +1,4 @@
-export interface InlineAttachmentSettings {
+export interface InlineAttachmentOptions {
   uploadUrl: string
   uploadMethod: string
   uploadFieldName: string
@@ -19,7 +19,7 @@ export interface InlineAttachmentSettings {
   onFileUploaded?: () => void
 }
 
-export interface IEditor {
+export interface Editor {
   getValue(): string
   setValue(value: string): void
   insertValue(value: string): void

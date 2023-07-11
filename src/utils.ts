@@ -1,4 +1,4 @@
-import {InlineAttachmentSettings} from './types'
+import {InlineAttachmentOptions} from './types'
 
 export class Utils {
 
@@ -7,7 +7,7 @@ export class Utils {
    *
    * @returns {Object}
    */
-  static merge(...objects: Partial<InlineAttachmentSettings>[]): InlineAttachmentSettings
+  static merge(...objects: Partial<InlineAttachmentOptions>[]): InlineAttachmentOptions
   {
     var result = {};
 
