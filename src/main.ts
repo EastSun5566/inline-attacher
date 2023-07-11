@@ -1,1 +1,1 @@
-export * from './inline-attachment'
+export * from './inline-attachment';

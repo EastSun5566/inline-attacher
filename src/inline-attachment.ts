@@ -1,18 +1,20 @@
-import { Utils } from "./utils";
-import {DEFAULT_OPTIONS} from "./constants";
+import { Utils } from './utils';
+import { DEFAULT_OPTIONS } from './constants';
 
 import { Editor, InlineAttachmentOptions } from './types';
 
 export class InlineAttachment {
-  private options: Partial<InlineAttachmentOptions> = DEFAULT_OPTIONS
-  private editor: Editor
-  private filenameTag = '{filename}'
-  private lastValue = ''
+  private options: Partial<InlineAttachmentOptions> = DEFAULT_OPTIONS;
 
-  constructor(editor: Editor, options: Partial<InlineAttachmentOptions>)
-  {
+  private editor: Editor;
+
+  private filenameTag = '{filename}';
+
+  private lastValue = '';
+
+  constructor(editor: Editor, options: Partial<InlineAttachmentOptions>) {
     this.editor = editor;
-    this.options = { ...DEFAULT_OPTIONS, ...options }
+    this.options = { ...DEFAULT_OPTIONS, ...options };
   }
 
   /**
@@ -21,8 +23,7 @@ export class InlineAttachment {
    * @param  {Blob} file blob data received from event.dataTransfer object
    * @return {XMLHttpRequest} request object which sends the file
    */
-  public uploadFile(file)
-  {
+  public uploadFile(file) {
     const formData = new FormData();
     const xhr = new XMLHttpRequest();
     const settings = this.options;
@@ -42,7 +43,7 @@ export class InlineAttachment {
       }
     }
 
-    let remoteFilename = "image-" + Date.now() + "." + extension;
+    let remoteFilename = `image-${Date.now()}.${extension}`;
     if (typeof settings.remoteFilename === 'function') {
       remoteFilename = settings.remoteFilename(file);
     }
@@ -50,8 +51,8 @@ export class InlineAttachment {
     formData.append(settings.uploadFieldName, file, remoteFilename);
 
     // Append the extra parameters to the formdata
-    if (typeof settings.extraParams === "object") {
-      for (var key in settings.extraParams) {
+    if (typeof settings.extraParams === 'object') {
+      for (const key in settings.extraParams) {
         if (settings.extraParams.hasOwnProperty(key)) {
           formData.append(key, settings.extraParams[key]);
         }
@@ -61,8 +62,8 @@ export class InlineAttachment {
     xhr.open('POST', settings.uploadUrl);
 
     // Add any available extra headers
-    if (typeof settings.extraHeaders === "object") {
-      for (var header in settings.extraHeaders) {
+    if (typeof settings.extraHeaders === 'object') {
+      for (const header in settings.extraHeaders) {
         if (settings.extraHeaders.hasOwnProperty(header)) {
           xhr.setRequestHeader(header, settings.extraHeaders[header]);
         }
@@ -79,7 +80,7 @@ export class InlineAttachment {
     };
 
     if (settings.beforeFileUpload) {
-      var result = settings.beforeFileUpload(xhr);
+      const result = settings.beforeFileUpload(xhr);
       result !== false && xhr.send(formData);
     }
 
@@ -91,16 +92,14 @@ export class InlineAttachment {
    *
    * @param {File} file clipboard data file
    */
-  public isFileAllowed(file): boolean
-  {
+  public isFileAllowed(file): boolean {
     if (file.kind === 'string') {
       return false;
     }
     if (this.options.allowedTypes.indexOf('*') === 0) {
       return true;
-    } else {
-      return this.options.allowedTypes.indexOf(file.type) >= 0;
     }
+    return this.options.allowedTypes.indexOf(file.type) >= 0;
   }
 
   /**
@@ -109,10 +108,9 @@ export class InlineAttachment {
    * @param  {XMLHttpRequest} xhr
    * @return {void}
    */
-  public onFileUploadResponse(xhr)
-  {
+  public onFileUploadResponse(xhr) {
     if (!this.options.onFileUploadResponse) {
-      return
+      return;
     }
 
     if (!this.lastValue) {
@@ -120,23 +118,22 @@ export class InlineAttachment {
     }
 
     if (this.options.onFileUploadResponse.call(this, xhr) !== false) {
-      var result = JSON.parse(xhr.responseText),
-        filename = result[this.options.jsonFieldName];
+      const result = JSON.parse(xhr.responseText);
+      const filename = result[this.options.jsonFieldName];
 
       if (result && filename) {
-        var newValue;
+        let newValue;
         if (typeof this.options.urlText === 'function') {
           newValue = this.options.urlText.call(this, filename, result);
         } else {
           newValue = this.options.urlText.replace(this.filenameTag, filename);
         }
-        var text = this.editor.getValue().replace(this.lastValue, newValue);
+        const text = this.editor.getValue().replace(this.lastValue, newValue);
         this.editor.setValue(text);
         this.options.onFileUploaded && this.options.onFileUploaded.call(this, filename);
       }
     }
   }
-
 
   /**
    * Called when a file has failed to upload
@@ -144,8 +141,7 @@ export class InlineAttachment {
    * @param  {XMLHttpRequest} xhr
    * @return {void}
    */
-  public onFileUploadError(xhr)
-  {
+  public onFileUploadError(xhr) {
     if (!this.options.onFileUploadError) {
       return;
     }
@@ -166,8 +162,7 @@ export class InlineAttachment {
    * @param  {File} file
    * @return {void}
    */
-  public onFileInserted(file)
-  {
+  public onFileInserted(file) {
     if (!this.options.onFileReceived) {
       return;
     }
@@ -178,7 +173,6 @@ export class InlineAttachment {
     }
   }
 
-
   /**
    * Called when a paste event occured
    * @param  {Event} e
@@ -186,16 +180,16 @@ export class InlineAttachment {
    */
   public onPaste(event: ClipboardEvent) {
     event.preventDefault();
-    if (!event.clipboardData?.files.length) return false
+    if (!event.clipboardData?.files.length) return false;
 
     let result = false;
     Array.from(event.clipboardData.files).forEach((file) => {
-          if (this.isFileAllowed(file)) {
-          result = true;
-          this.onFileInserted(file);
-          this.uploadFile(file);
-        }
-      })
+      if (this.isFileAllowed(file)) {
+        result = true;
+        this.onFileInserted(file);
+        this.uploadFile(file);
+      }
+    });
 
     return result;
   }
@@ -205,8 +199,7 @@ export class InlineAttachment {
    * @param  {Event} e
    * @return {Boolean} if the event was handled
    */
-  public onDrop(e)
-  {
+  public onDrop(e) {
     let result = false;
 
     for (let i = 0; i < e.dataTransfer.files.length; i++) {

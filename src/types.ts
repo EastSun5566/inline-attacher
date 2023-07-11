@@ -6,10 +6,10 @@ export interface InlineAttachmentOptions {
   jsonFieldName: string
   allowedTypes: string[]
   progressText: string
-  urlText: string|(() => string)
+  urlText: string | (() => string)
   errorText: string
-  extraParams: {[name: string]: any}
-  extraHeaders: {[name: string]: any}
+  extraParams: { [name: string]: any }
+  extraHeaders: { [name: string]: any }
   beforeFileUpload?: (xhr: XMLHttpRequest) => boolean
   setupFormData?: (formData: FormData, file: File) => void
   remoteFilename?: (file: File) => string

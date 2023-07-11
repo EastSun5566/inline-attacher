@@ -35,7 +35,7 @@ export const DEFAULT_OPTIONS = {
     'image/jpeg',
     'image/png',
     'image/jpg',
-    'image/gif'
+    'image/gif',
   ],
 
   /**
@@ -49,12 +49,12 @@ export const DEFAULT_OPTIONS = {
    * will be replaced by the urlText, the {filename} tag will be replaced
    * by the filename that has been returned by the server
    */
-  urlText: "![file]({filename})",
+  urlText: '![file]({filename})',
 
   /**
    * Text which will be used when uploading has failed
    */
-  errorText: "Error uploading file",
+  errorText: 'Error uploading file',
 
   /**
    * Extra parameters which will be send when uploading a file
@@ -69,14 +69,14 @@ export const DEFAULT_OPTIONS = {
   /**
    * Before the file is send
    */
-  beforeFileUpload: function() {
+  beforeFileUpload() {
     return true;
   },
 
   /**
    * Triggers when a file is dropped or pasted
    */
-  onFileReceived: function() {
+  onFileReceived() {
     return true;
   },
 
@@ -85,7 +85,7 @@ export const DEFAULT_OPTIONS = {
    *
    * @return {Boolean} when false is returned it will prevent default upload behavior
    */
-  onFileUploadResponse: function() {
+  onFileUploadResponse() {
     return true;
   },
 
@@ -95,12 +95,12 @@ export const DEFAULT_OPTIONS = {
    *
    * @return {Boolean} when false is returned it will prevent default error behavior
    */
-  onFileUploadError: function() {
+  onFileUploadError() {
     return true;
   },
 
   /**
    * When a file has succesfully been uploaded
    */
-  onFileUploaded: function() {}
-}
+  onFileUploaded() {},
+};
