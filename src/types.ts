@@ -13,7 +13,7 @@ export interface InlineAttachmentOptions {
   beforeFileUpload?: (xhr: XMLHttpRequest) => boolean
   setupFormData?: (formData: FormData, file: File) => void
   remoteFilename?: (file: File) => string
-  onFileReceived?: () => boolean
+  onFileReceived?: (file: File) => boolean
   onFileUploadResponse?: () => boolean
   onFileUploadError?: () => boolean
   onFileUploaded?: () => void
