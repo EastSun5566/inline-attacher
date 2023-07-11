@@ -66,7 +66,7 @@ class InputEditor implements Editor {
   }
 }
 
-export class InlineAttachmentInputAdapter {
+export class InputInlineAttachmentAdapter {
   element: InputElement;
 
   inlineAttachment: InlineAttachment;
@@ -113,6 +113,6 @@ export class InlineAttachmentInputAdapter {
   }
 }
 
-export function bind2Input(...params: [InputElement, Partial<InlineAttachmentOptions>]) {
-  return new InlineAttachmentInputAdapter(...params);
+export function bindInput(...params: [InputElement, Partial<InlineAttachmentOptions>]) {
+  return new InputInlineAttachmentAdapter(...params).bind();
 }

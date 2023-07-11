@@ -20,6 +20,7 @@
     "lint": "eslint --fix --ext .ts src"
   },
   "devDependencies": {
+    "@codemirror/view": "^6.14.1",
     "@types/node": "^20.4.1",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
