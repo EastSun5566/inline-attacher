@@ -1,4 +1,6 @@
-import type { EditorView } from '@codemirror/view';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { EditorView } from '@codemirror/view';
+import type { Extension } from '@codemirror/state';
 
 import { Editor, InlineAttachmentOptions } from '../types';
 import { InlineAttachment } from '../inline-attachment';
@@ -46,7 +48,7 @@ export class CodeMirrorInlineAttachmentAdapter {
     this.view.dom.addEventListener(
       'paste',
       (event) => {
-        this.inlineAttachment.onPaste(event as ClipboardEvent);
+        this.inlineAttachment.onPaste(event);
       },
       false,
     );
@@ -56,7 +58,7 @@ export class CodeMirrorInlineAttachmentAdapter {
       (event) => {
         event.stopPropagation();
         event.preventDefault();
-        this.inlineAttachment.onDrop(event as DragEvent);
+        this.inlineAttachment.onDrop(event);
       },
       false,
     );
@@ -68,9 +70,40 @@ export class CodeMirrorInlineAttachmentAdapter {
         event.preventDefault();
       },
     );
+
+    this.view.dom.addEventListener(
+      'dragover',
+      (event) => {
+        event.stopPropagation();
+        event.preventDefault();
+      },
+    );
   }
 }
 
 export function bindCodeMirror(...params: [EditorView, Partial<InlineAttachmentOptions>]) {
   return new CodeMirrorInlineAttachmentAdapter(...params).bind();
+}
+
+export function inlineAttachmentExtension(options: Partial<InlineAttachmentOptions>): Extension {
+  return EditorView.domEventHandlers({
+    paste: (event, view) => {
+      const adapter = new CodeMirrorInlineAttachmentAdapter(view, options);
+      adapter.inlineAttachment.onPaste(event);
+    },
+    drop: (event, view) => {
+      event.stopPropagation();
+      event.preventDefault();
+      const adapter = new CodeMirrorInlineAttachmentAdapter(view, options);
+      adapter.inlineAttachment.onDrop(event);
+    },
+    dragenter: (event) => {
+      event.stopPropagation();
+      event.preventDefault();
+    },
+    dragover: (event) => {
+      event.stopPropagation();
+      event.preventDefault();
+    },
+  });
 }
