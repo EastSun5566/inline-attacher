@@ -46,56 +46,51 @@ function insertTextAtCursor(element: InputElement, text: string) {
   element.scrollTop = scrollPos;
 }
 
-class InputEditor implements Editor {
-  private element: InputElement;
+class InputEditor implements Editor<InputElement> {
+  instance: InputElement;
 
   constructor(element: InputElement) {
-    this.element = element;
+    this.instance = element;
   }
 
   getValue() {
-    return this.element.value;
+    return this.instance.value;
   }
 
   insertValue(value: string) {
-    insertTextAtCursor(this.element, value);
+    insertTextAtCursor(this.instance, value);
   }
 
   setValue(value: string) {
-    this.element.value = value;
+    this.instance.value = value;
   }
 }
 
-export class InputInlineAttachmentAdapter {
-  element: InputElement;
-
-  inlineAttachment: InlineAttachment;
-
+export class InputInlineAttachmentAdapter extends InlineAttachment<InputElement> {
   constructor(element: InputElement, options: Partial<InlineAttachmentOptions>) {
-    this.element = element;
-    this.inlineAttachment = new InlineAttachment(new InputEditor(element), options);
+    super(new InputEditor(element), options);
   }
 
   bind() {
-    this.element.addEventListener(
+    this.editor.instance.addEventListener(
       'paste',
       (event) => {
-        this.inlineAttachment.onPaste(event as ClipboardEvent);
+        this.onPaste(event as ClipboardEvent);
       },
       false,
     );
 
-    this.element.addEventListener(
+    this.editor.instance.addEventListener(
       'drop',
       (event) => {
         event.stopPropagation();
         event.preventDefault();
-        this.inlineAttachment.onDrop(event as DragEvent);
+        this.onDrop(event as DragEvent);
       },
       false,
     );
 
-    this.element.addEventListener(
+    this.editor.instance.addEventListener(
       'dragenter',
       (event) => {
         event.stopPropagation();
@@ -103,7 +98,7 @@ export class InputInlineAttachmentAdapter {
       },
     );
 
-    this.element.addEventListener(
+    this.editor.instance.addEventListener(
       'dragover',
       (event) => {
         event.stopPropagation();
@@ -113,6 +108,6 @@ export class InputInlineAttachmentAdapter {
   }
 }
 
-export function bindInput(...params: [InputElement, Partial<InlineAttachmentOptions>]) {
+export function attach(...params: [InputElement, Partial<InlineAttachmentOptions>]) {
   return new InputInlineAttachmentAdapter(...params).bind();
 }

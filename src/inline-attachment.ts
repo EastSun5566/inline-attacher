@@ -1,16 +1,16 @@
 import { DEFAULT_OPTIONS } from './constants';
 import { Editor, InlineAttachmentOptions } from './types';
 
-export class InlineAttachment {
-  private options: InlineAttachmentOptions = DEFAULT_OPTIONS;
+export class InlineAttachment<TInstance> {
+  options: InlineAttachmentOptions = DEFAULT_OPTIONS;
 
-  private editor: Editor;
+  editor: Editor<TInstance>;
 
-  private filenameTag = '{filename}';
+  filenameTag = '{filename}';
 
-  private lastValue = '';
+  lastValue = '';
 
-  constructor(editor: Editor, options: Partial<InlineAttachmentOptions>) {
+  constructor(editor: Editor<TInstance>, options: Partial<InlineAttachmentOptions>) {
     this.editor = editor;
     this.options = { ...DEFAULT_OPTIONS, ...options };
   }

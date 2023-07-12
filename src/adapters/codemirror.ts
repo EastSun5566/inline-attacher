@@ -5,65 +5,59 @@ import type { Extension } from '@codemirror/state';
 import { Editor, InlineAttachmentOptions } from '../types';
 import { InlineAttachment } from '../inline-attachment';
 
-class CodeMirrorEditor implements Editor {
-  view: EditorView;
+class CodeMirrorEditor implements Editor<EditorView> {
+  instance: EditorView;
 
-  constructor(view: EditorView) {
-    this.view = view;
+  constructor(editorView: EditorView) {
+    this.instance = editorView;
   }
 
   getValue(): string {
-    return this.view.state.doc.toString();
+    return this.instance.state.doc.toString();
   }
 
   insertValue(value: string): void {
-    this.view.dispatch(this.view.state.replaceSelection(value));
+    this.instance.dispatch(this.instance.state.replaceSelection(value));
   }
 
   setValue(value: string): void {
-    const cursor = this.view.state.selection.main.head;
-    this.view.dispatch({
+    const cursor = this.instance.state.selection.main.head;
+    this.instance.dispatch({
       changes: {
         from: 0,
-        to: this.view.state.doc.length,
+        to: this.instance.state.doc.length,
         insert: value,
       },
     });
-    this.view.dispatch({ selection: { anchor: cursor } });
+    this.instance.dispatch({ selection: { anchor: cursor } });
   }
 }
 
-// eslint-disable-next-line import/prefer-default-export
-export class CodeMirrorInlineAttachmentAdapter {
-  view: EditorView;
-
-  inlineAttachment: InlineAttachment;
-
-  constructor(view: EditorView, options: Partial<InlineAttachmentOptions>) {
-    this.view = view;
-    this.inlineAttachment = new InlineAttachment(new CodeMirrorEditor(view), options);
+export class CodeMirrorInlineAttachmentAdapter extends InlineAttachment<EditorView> {
+  constructor(editorView: EditorView, options: Partial<InlineAttachmentOptions>) {
+    super(new CodeMirrorEditor(editorView), options);
   }
 
   bind() {
-    this.view.dom.addEventListener(
+    this.editor.instance.dom.addEventListener(
       'paste',
       (event) => {
-        this.inlineAttachment.onPaste(event);
+        this.onPaste(event);
       },
       false,
     );
 
-    this.view.dom.addEventListener(
+    this.editor.instance.dom.addEventListener(
       'drop',
       (event) => {
         event.stopPropagation();
         event.preventDefault();
-        this.inlineAttachment.onDrop(event);
+        this.onDrop(event);
       },
       false,
     );
 
-    this.view.dom.addEventListener(
+    this.editor.instance.dom.addEventListener(
       'dragenter',
       (event) => {
         event.stopPropagation();
@@ -71,7 +65,7 @@ export class CodeMirrorInlineAttachmentAdapter {
       },
     );
 
-    this.view.dom.addEventListener(
+    this.editor.instance.dom.addEventListener(
       'dragover',
       (event) => {
         event.stopPropagation();
@@ -81,21 +75,21 @@ export class CodeMirrorInlineAttachmentAdapter {
   }
 }
 
-export function bindCodeMirror(...params: [EditorView, Partial<InlineAttachmentOptions>]) {
+export function attachCodeMirror(...params: [EditorView, Partial<InlineAttachmentOptions>]) {
   return new CodeMirrorInlineAttachmentAdapter(...params).bind();
 }
 
 export function inlineAttachmentExtension(options: Partial<InlineAttachmentOptions>): Extension {
   return EditorView.domEventHandlers({
     paste: (event, view) => {
-      const adapter = new CodeMirrorInlineAttachmentAdapter(view, options);
-      adapter.inlineAttachment.onPaste(event);
+      const inlineAttachment = new CodeMirrorInlineAttachmentAdapter(view, options);
+      inlineAttachment.onPaste(event);
     },
     drop: (event, view) => {
       event.stopPropagation();
       event.preventDefault();
-      const adapter = new CodeMirrorInlineAttachmentAdapter(view, options);
-      adapter.inlineAttachment.onDrop(event);
+      const inlineAttachment = new CodeMirrorInlineAttachmentAdapter(view, options);
+      inlineAttachment.onDrop(event);
     },
     dragenter: (event) => {
       event.stopPropagation();

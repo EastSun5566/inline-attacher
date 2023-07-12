@@ -19,7 +19,8 @@ export interface InlineAttachmentOptions {
   onFileUploaded?: (filename: string) => void
 }
 
-export interface Editor {
+export interface Editor<TInstance> {
+  instance: TInstance
   getValue(): string
   setValue(value: string): void
   insertValue(value: string): void
