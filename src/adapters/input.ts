@@ -46,10 +46,10 @@ function insertTextAtCursor(element: InputElement, text: string) {
   element.scrollTop = scrollPos;
 }
 
-class InputEditor implements Editor<InputElement> {
-  instance: InputElement;
+class InputEditor<TInstance extends InputElement> implements Editor<TInstance> {
+  instance: TInstance;
 
-  constructor(element: InputElement) {
+  constructor(element: TInstance) {
     this.instance = element;
   }
 
@@ -66,8 +66,10 @@ class InputEditor implements Editor<InputElement> {
   }
 }
 
-export class InputInlineAttachmentAdapter extends InlineAttachment<InputElement> {
-  constructor(element: InputElement, options: Partial<InlineAttachmentOptions>) {
+export class InputInlineAttachmentAdapter<
+  TInstance extends InputElement,
+> extends InlineAttachment<TInstance> {
+  constructor(element: TInstance, options: Partial<InlineAttachmentOptions> = {}) {
     super(new InputEditor(element), options);
   }
 
@@ -108,6 +110,6 @@ export class InputInlineAttachmentAdapter extends InlineAttachment<InputElement>
   }
 }
 
-export function attach(...params: [InputElement, Partial<InlineAttachmentOptions>]) {
+export function attach(...params: [InputElement, Partial<InlineAttachmentOptions>?]) {
   return new InputInlineAttachmentAdapter(...params).bind();
 }

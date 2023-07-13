@@ -5,10 +5,10 @@ import type { Extension } from '@codemirror/state';
 import { Editor, InlineAttachmentOptions } from '../types';
 import { InlineAttachment } from '../inline-attachment';
 
-class CodeMirrorEditor implements Editor<EditorView> {
-  instance: EditorView;
+class CodeMirrorEditor<TInstance extends EditorView> implements Editor<TInstance> {
+  instance: TInstance;
 
-  constructor(editorView: EditorView) {
+  constructor(editorView: TInstance) {
     this.instance = editorView;
   }
 
@@ -33,8 +33,10 @@ class CodeMirrorEditor implements Editor<EditorView> {
   }
 }
 
-export class CodeMirrorInlineAttachmentAdapter extends InlineAttachment<EditorView> {
-  constructor(editorView: EditorView, options: Partial<InlineAttachmentOptions>) {
+export class CodeMirrorInlineAttachmentAdapter<
+  TInstance extends EditorView,
+> extends InlineAttachment<TInstance> {
+  constructor(editorView: TInstance, options: Partial<InlineAttachmentOptions> = {}) {
     super(new CodeMirrorEditor(editorView), options);
   }
 
@@ -75,11 +77,13 @@ export class CodeMirrorInlineAttachmentAdapter extends InlineAttachment<EditorVi
   }
 }
 
-export function attachCodeMirror(...params: [EditorView, Partial<InlineAttachmentOptions>]) {
+export function attachCodeMirror(...params: [EditorView, Partial<InlineAttachmentOptions>?]) {
   return new CodeMirrorInlineAttachmentAdapter(...params).bind();
 }
 
-export function inlineAttachmentExtension(options: Partial<InlineAttachmentOptions>): Extension {
+export function inlineAttachmentExtension(
+  options: Partial<InlineAttachmentOptions> = {},
+): Extension {
   return EditorView.domEventHandlers({
     paste: (event, view) => {
       const inlineAttachment = new CodeMirrorInlineAttachmentAdapter(view, options);
