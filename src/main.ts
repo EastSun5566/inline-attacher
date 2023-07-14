@@ -1,1 +1,2 @@
-export * from './inline-attachment';
+export * from './core';
+export * from './types';

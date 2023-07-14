@@ -1,4 +1,4 @@
-import { InlineAttachment } from '../inline-attachment';
+import { InlineAttachment } from '../core';
 import type { Editor, InlineAttachmentOptions } from '../types';
 
 type InputElement = HTMLInputElement | HTMLTextAreaElement;

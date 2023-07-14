@@ -3,7 +3,7 @@ import { EditorView } from '@codemirror/view';
 import type { Extension } from '@codemirror/state';
 
 import { Editor, InlineAttachmentOptions } from '../types';
-import { InlineAttachment } from '../inline-attachment';
+import { InlineAttachment } from '../core';
 
 class CodeMirrorEditor<TInstance extends EditorView> implements Editor<TInstance> {
   instance: TInstance;
