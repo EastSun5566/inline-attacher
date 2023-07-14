@@ -1,7 +1,7 @@
-/**
- * Default Options
- */
-export const DEFAULT_OPTIONS = {
+import { InlineAttachmentOptions } from './types';
+
+/** Default Options */
+export const DEFAULT_OPTIONS: InlineAttachmentOptions = {
   /**
    * URL where the file will be send
    */
@@ -26,7 +26,7 @@ export const DEFAULT_OPTIONS = {
   /**
    * JSON field which refers to the uploaded file URL
    */
-  jsonFieldName: 'filename',
+  responseUrlKey: 'filename',
 
   /**
    * Allowed MIME types
@@ -85,7 +85,7 @@ export const DEFAULT_OPTIONS = {
    *
    * @return {Boolean} when false is returned it will prevent default upload behavior
    */
-  onFileUploadResponse() {
+  onFileUploadSucceed() {
     return true;
   },
 
@@ -100,7 +100,7 @@ export const DEFAULT_OPTIONS = {
   },
 
   /**
-   * When a file has succesfully been uploaded
+   * When a file has successfully been uploaded
    */
   onFileUploaded() {},
 };

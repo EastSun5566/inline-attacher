@@ -1,5 +1,6 @@
 import { DEFAULT_OPTIONS } from './constants';
 import { Editor, InlineAttachmentOptions } from './types';
+import { upload, isFunction, type Response } from './utils';
 
 export class InlineAttachment<TInstance> {
   options: InlineAttachmentOptions = DEFAULT_OPTIONS;
@@ -15,15 +16,8 @@ export class InlineAttachment<TInstance> {
     this.options = { ...DEFAULT_OPTIONS, ...options };
   }
 
-  /**
-   * Uploads the blob
-   *
-   * @param  {Blob} file blob data received from event.dataTransfer object
-   * @return {XMLHttpRequest} request object which sends the file
-   */
-  public uploadFile(file: File) {
-    const formData = new FormData();
-    const xhr = new XMLHttpRequest();
+  /** Uploads file */
+  async uploadFile(file: File) {
     const {
       defaultExtension,
       setupFormData,
@@ -32,11 +26,13 @@ export class InlineAttachment<TInstance> {
       extraParams,
       extraHeaders,
       uploadUrl,
+      uploadMethod,
       beforeFileUpload,
     } = this.options;
 
+    const formData = new FormData();
     let extension = defaultExtension;
-    setupFormData?.(formData, file);
+    if (!setupFormData?.(formData, file)) return;
 
     // Attach the file.
     // If coming from clipboard, add a default filename (only works in Chrome for now)
@@ -49,31 +45,24 @@ export class InlineAttachment<TInstance> {
     const filename = remoteFilename?.(file) || `image-${Date.now()}.${extension}`;
     formData.append(uploadFieldName, file, filename);
 
-    // Append the extra parameters to the formdata
+    // Append the extra parameters to the formData
     Object.keys(extraParams).forEach((key) => {
       formData.append(key, extraParams[key]);
     });
 
-    xhr.open('POST', uploadUrl);
+    if (!beforeFileUpload?.(formData)) return;
 
-    // Add any available extra headers
-    Object.keys(extraHeaders).forEach((key) => {
-      xhr.setRequestHeader(key, extraHeaders[key]);
+    const { ok, value } = await upload({
+      url: uploadUrl,
+      method: uploadMethod,
+      headers: extraHeaders,
     });
+    if (!ok) {
+      this.onFileUploadError(value as Error);
+      return;
+    }
 
-    xhr.onload = () => {
-      // If HTTP status is OK or Created
-      if (xhr.status === 200 || xhr.status === 201) {
-        this.onFileUploadSucceed(xhr);
-        return;
-      }
-
-      this.onFileUploadError(xhr);
-    };
-
-    if (beforeFileUpload?.(xhr)) xhr.send(formData);
-
-    return xhr;
+    this.onFileUploadSucceed(value as Response);
   }
 
   /**
@@ -87,49 +76,34 @@ export class InlineAttachment<TInstance> {
   /**
    * Handles upload response
    */
-  public onFileUploadSucceed(xhr: XMLHttpRequest) {
-    if (!this.options.onFileUploadResponse) {
-      return;
-    }
+  public onFileUploadSucceed(response: Record<string, unknown>) {
+    const { onFileUploadSucceed, urlText, responseUrlKey } = this.options;
 
-    if (!this.lastValue) {
-      return;
-    }
+    if (!onFileUploadSucceed?.(response)) return;
+    if (!this.lastValue) return;
 
-    if (this.options.onFileUploadResponse(xhr) !== false) {
-      const result = JSON.parse(xhr.responseText);
-      const filename = result[this.options.jsonFieldName];
+    const url = response[responseUrlKey] as string;
+    if (!url) return;
 
-      if (result && filename) {
-        let newValue;
-        if (typeof this.options.urlText === 'function') {
-          newValue = this.options.urlText(filename, result);
-        } else {
-          newValue = this.options.urlText.replace(this.filenameTag, filename);
-        }
-        const text = this.editor.getValue().replace(this.lastValue, newValue);
-        this.editor.setValue(text);
-        this.options.onFileUploaded?.(filename);
-      }
-    }
+    const newValue = isFunction(urlText)
+      ? urlText(url, response)
+      : urlText.replace(this.filenameTag, url);
+
+    const text = this.editor.getValue().replace(this.lastValue, newValue);
+    this.editor.setValue(text);
+
+    this.options.onFileUploaded?.(url);
   }
 
   /**
    * Called when a file has failed to upload
    */
-  public onFileUploadError(xhr: XMLHttpRequest) {
-    if (!this.options.onFileUploadError) {
-      return;
-    }
+  public onFileUploadError(error: Error) {
+    if (!this.options.onFileUploadError?.(error)) return;
+    if (!this.lastValue) return;
 
-    if (!this.lastValue) {
-      return;
-    }
-
-    if (this.options.onFileUploadError(xhr) !== false) {
-      const text = this.editor.getValue().replace(this.lastValue, this.options.errorText);
-      this.editor.setValue(text);
-    }
+    const text = this.editor.getValue().replace(this.lastValue, this.options.errorText);
+    this.editor.setValue(text);
   }
 
   /**
