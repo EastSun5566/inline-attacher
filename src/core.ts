@@ -20,7 +20,6 @@ export class InlineAttachment<TInstance> {
   async uploadFile(file: File) {
     const {
       defaultExtension,
-      setupFormData,
       remoteFilename,
       uploadFieldName,
       extraParams,
@@ -32,7 +31,6 @@ export class InlineAttachment<TInstance> {
 
     const formData = new FormData();
     let extension = defaultExtension;
-    if (!setupFormData?.(formData, file)) return;
 
     // Attach the file.
     // If coming from clipboard, add a default filename (only works in Chrome for now)

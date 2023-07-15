@@ -11,7 +11,6 @@ export interface InlineAttachmentOptions {
   extraParams: { [name: string]: any }
   extraHeaders: { [name: string]: any }
   beforeFileUpload?: (formData: FormData) => boolean
-  setupFormData?: (formData: FormData, file: File) => void
   remoteFilename?: (file: File) => string
   onFileReceived?: (file: File) => boolean
   onFileUploadSucceed?: (response: Record<string, unknown>) => boolean
