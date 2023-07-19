@@ -54,6 +54,7 @@ export class CodeMirrorInlineAttachmentAdapter<
       (event) => {
         event.stopPropagation();
         event.preventDefault();
+
         this.onDrop(event);
       },
       false,
@@ -92,6 +93,7 @@ export function inlineAttachmentExtension(
     drop: (event, view) => {
       event.stopPropagation();
       event.preventDefault();
+
       const inlineAttachment = new CodeMirrorInlineAttachmentAdapter(view, options);
       inlineAttachment.onDrop(event);
     },
