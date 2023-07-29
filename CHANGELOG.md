@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.2](https://github.com/EastSun5566/inline-attachment/compare/v0.0.1...v0.0.2) (2023-07-29)
+
+
+### Bug Fixes
+
+* rename pkg ([2b06146](https://github.com/EastSun5566/inline-attachment/commit/2b06146bf7b5001e6aeb1c299c500f872497e5af))
+
 ### 0.0.1 (2023-07-19)
 
 
