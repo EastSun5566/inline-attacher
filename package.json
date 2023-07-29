@@ -1,18 +1,19 @@
 {
-  "name": "inline-attachment",
+  "name": "inline-attachment-next",
   "version": "0.0.1",
   "type": "module",
   "files": [
     "dist"
   ],
-  "main": "./dist/inline-attachment.umd.cjs",
-  "module": "./dist/inline-attachment.js",
+  "main": "./dist/inline-attachment-next.umd.cjs",
+  "module": "./dist/inline-attachment-next.js",
   "exports": {
     ".": {
-      "import": "./dist/inline-attachment.js",
-      "require": "./dist/inline-attachment.umd.cjs"
+      "import": "./dist/inline-attachment-next.js",
+      "require": "./dist/inline-attachment-next.umd.cjs"
     }
   },
+  "author": "Michael Wang 汪東陽 <michael19920327@gmail.com>",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
