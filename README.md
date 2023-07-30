@@ -1,5 +1,9 @@
 # 📎 Inline Attachment Next
 
+[![NPM Version](https://img.shields.io/npm/v/inline-attachment-next.svg?style=for-the-badge)](https://www.npmjs.com/package/inline-attachment-next)
+[![NPM Downloads](https://img.shields.io/npm/dt/inline-attachment-next.svg?style=for-the-badge)](https://www.npmjs.com/package/inline-attachment-next)
+[![License](https://img.shields.io/github/license/EastSun5566/inline-attachment.svg?style=for-the-badge)](https://github.com/EastSun5566/inline-attachment/blob/main/LICENSE)
+
 > A modern port from [Inline Attachment](https://github.com/Rovak/InlineAttachment)
 
 ## Installation
