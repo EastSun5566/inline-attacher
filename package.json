@@ -1,6 +1,7 @@
 {
   "name": "inline-attachment-next",
   "version": "0.0.3",
+  "description": "📎 A modern port from Inline Attachment",
   "type": "module",
   "files": [
     "dist"
@@ -13,7 +14,6 @@
       "require": "./dist/inline-attachment-next.umd.cjs"
     }
   },
-  "author": "Michael Wang 汪東陽 <michael19920327@gmail.com> (https://github.com/EastSun5566)",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -22,6 +22,25 @@
     "prepublishOnly": "pnpm build",
     "release": "pnpx standard-version && git push --follow-tags && pnpm publish"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/EastSun5566/inline-attachment"
+  },
+  "bugs": {
+    "url": "https://github.com/EastSun5566/inline-attachment/issues/new"
+  },
+  "homepage": "https://github.com/EastSun5566/inline-attachment",
+  "keywords": [
+    "inline-attachment",
+    "attachment",
+    "upload",
+    "paste",
+    "drop",
+    "image",
+    "file"
+  ],
+  "author": "Michael Wang 汪東陽 <michael19920327@gmail.com> (https://github.com/EastSun5566)",
+  "license": "MIT",
   "devDependencies": {
     "@codemirror/state": "^6.2.1",
     "@codemirror/view": "^6.14.1",
