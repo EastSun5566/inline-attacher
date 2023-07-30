@@ -5,7 +5,7 @@ export const DEFAULT_OPTIONS: InlineAttachmentOptions = {
   /**
    * URL where the file will be send
    */
-  uploadUrl: 'upload_attachment.php',
+  uploadUrl: '/upload',
 
   /**
    * Which method will be used to send the file to the upload URL

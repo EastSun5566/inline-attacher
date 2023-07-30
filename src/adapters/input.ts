@@ -3,9 +3,7 @@ import type { Editor, InlineAttachmentOptions } from '../types';
 
 type InputElement = HTMLInputElement | HTMLTextAreaElement;
 
-/**
- * Inserts the given value at the current cursor position of the textarea element
- */
+/** Inserts the given value at the current cursor position of the textarea element */
 function insertTextAtCursor(element: InputElement, text: string) {
   const scrollPos = element.scrollTop;
   let strPos = 0;
