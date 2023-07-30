@@ -8,6 +8,7 @@
   ],
   "main": "./dist/inline-attachment-next.umd.cjs",
   "module": "./dist/inline-attachment-next.js",
+  "types": "./dist/inline-attachment-next.d.ts",
   "exports": {
     ".": {
       "import": "./dist/inline-attachment-next.js",
@@ -56,6 +57,7 @@
     "eslint-config-airbnb-typescript": "^17.0.0",
     "eslint-plugin-import": "^2.27.5",
     "typescript": "^5.0.2",
-    "vite": "^4.4.0"
+    "vite": "^4.4.0",
+    "vite-plugin-dts": "^3.4.0"
   }
 }

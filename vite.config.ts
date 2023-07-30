@@ -1,6 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import { resolve } from 'path';
+import { resolve } from 'node:path';
 import { defineConfig } from 'vite';
+import dts from 'vite-plugin-dts';
 
 import { name } from './package.json';
 
@@ -12,4 +13,7 @@ export default defineConfig({
       fileName: name,
     },
   },
+  plugins: [dts({
+    insertTypesEntry: true,
+  })],
 });
