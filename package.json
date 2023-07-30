@@ -22,14 +22,6 @@
     "prepublishOnly": "pnpm build",
     "release": "pnpx standard-version && git push --follow-tags && pnpm publish"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/EastSun5566/inline-attachment"
-  },
-  "bugs": {
-    "url": "https://github.com/EastSun5566/inline-attachment/issues/new"
-  },
-  "homepage": "https://github.com/EastSun5566/inline-attachment",
   "keywords": [
     "inline-attachment",
     "attachment",
@@ -41,6 +33,18 @@
   ],
   "author": "Michael Wang 汪東陽 <michael19920327@gmail.com> (https://github.com/EastSun5566)",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/EastSun5566/inline-attachment"
+  },
+  "bugs": {
+    "url": "https://github.com/EastSun5566/inline-attachment/issues/new"
+  },
+  "homepage": "https://github.com/EastSun5566/inline-attachment",
+  "packageManager": "pnpm@8.6.0",
+  "engines": {
+    "node": "^14.18.0 || >=16.0.0"
+  },
   "devDependencies": {
     "@codemirror/state": "^6.2.1",
     "@codemirror/view": "^6.14.1",
