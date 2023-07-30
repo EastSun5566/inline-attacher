@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.4](https://github.com/EastSun5566/inline-attachment/compare/v0.0.3...v0.0.4) (2023-07-30)
+
+
+### Features
+
+* add declaration file to dist ([ff81ecf](https://github.com/EastSun5566/inline-attachment/commit/ff81ecfa64c745449c5deadc490748a2e23d990e))
+
 ### [0.0.3](https://github.com/EastSun5566/inline-attachment/compare/v0.0.2...v0.0.3) (2023-07-30)
 
 
