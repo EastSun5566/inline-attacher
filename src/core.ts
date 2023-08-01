@@ -53,6 +53,7 @@ export class InlineAttachment<TInstance> {
     const { ok, value } = await upload({
       url: uploadUrl,
       method: uploadMethod,
+      body: formData,
       headers: extraHeaders,
     });
     if (!ok) {
