@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.5](https://github.com/EastSun5566/inline-attachment/compare/v0.0.4...v0.0.5) (2023-08-01)
+
+
+### Features
+
+* add playground ([c38ebcb](https://github.com/EastSun5566/inline-attachment/commit/c38ebcb5f5530200e00fb7d30336365b958b9e00))
+
+
+### Bug Fixes
+
+* should add request body... ([7dabb32](https://github.com/EastSun5566/inline-attachment/commit/7dabb3271a6be9f5165d574e3fd62f5c334634be))
+
 ### [0.0.4](https://github.com/EastSun5566/inline-attachment/compare/v0.0.3...v0.0.4) (2023-07-30)
 
 
