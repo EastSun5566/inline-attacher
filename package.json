@@ -19,6 +19,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
+    "playground:dev": "pnpm -C playground dev",
     "lint": "eslint --fix --ext .ts src",
     "prepublishOnly": "pnpm build",
     "release": "pnpx standard-version && git push --follow-tags && pnpm publish"
