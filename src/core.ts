@@ -1,13 +1,18 @@
 import { DEFAULT_OPTIONS } from './constants';
 import { Editor, InlineAttachmentOptions } from './types';
-import { upload, isFunction, type Response } from './utils';
+import {
+  upload,
+  isFunction,
+  get,
+  type Response,
+} from './utils';
 
 export class InlineAttachment<TInstance> {
   options: InlineAttachmentOptions = DEFAULT_OPTIONS;
 
   editor: Editor<TInstance>;
 
-  filenameTag = '{filename}';
+  filename = '';
 
   lastValue = '';
 
@@ -41,6 +46,7 @@ export class InlineAttachment<TInstance> {
     }
 
     const filename = remoteFilename?.(file) || `image-${Date.now()}.${extension}`;
+    this.filename = filename;
     formData.append(uploadFieldName, file, filename);
 
     // Append the extra parameters to the formData
@@ -81,12 +87,15 @@ export class InlineAttachment<TInstance> {
     if (!onFileUploadSucceed?.(response)) return;
     if (!this.lastValue) return;
 
-    const url = response[responseUrlKey] as string;
+    const url = (get(response, responseUrlKey) || 'unknown URL') as string;
     if (!url) return;
 
+    const pattern = /!\[({[^}]+})]\(([^)]+)\)/;
     const newValue = isFunction(urlText)
       ? urlText(url, response)
-      : urlText.replace(this.filenameTag, url);
+      : urlText
+        .replace(urlText.match(pattern)![1], this.filename)
+        .replace(urlText.match(pattern)![2], url);
 
     const text = this.editor.getValue().replace(this.lastValue, newValue);
     this.editor.setValue(text);

@@ -6,7 +6,7 @@ export interface InlineAttachmentOptions {
   responseUrlKey: string
   allowedTypes: string[]
   progressText: string
-  urlText: string | ((filename: string, result: unknown) => string)
+  urlText: string | ((url: string, result: unknown) => string)
   errorText: string
   extraParams: { [name: string]: any }
   extraHeaders: { [name: string]: any }

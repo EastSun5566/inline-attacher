@@ -26,7 +26,7 @@ export const DEFAULT_OPTIONS: InlineAttachmentOptions = {
   /**
    * JSON field which refers to the uploaded file URL
    */
-  responseUrlKey: 'filename',
+  responseUrlKey: 'url',
 
   /**
    * Allowed MIME types
@@ -46,10 +46,9 @@ export const DEFAULT_OPTIONS: InlineAttachmentOptions = {
 
   /**
    * When a file has successfully been uploaded the progressText
-   * will be replaced by the urlText, the {filename} tag will be replaced
-   * by the filename that has been returned by the server
+   * will be replaced by the urlText, the {url} tag will be replaced response url
    */
-  urlText: '![file]({filename})',
+  urlText: '![{alt}]({url})',
 
   /**
    * Text which will be used when uploading has failed

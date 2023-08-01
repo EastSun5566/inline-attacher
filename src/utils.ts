@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 interface UploadOptions extends RequestInit {
   url: string;
 }
@@ -33,4 +34,22 @@ export async function upload<TResponse = Response>({
 
 export function isFunction(value: unknown): value is Function {
   return typeof value === 'function';
+}
+
+export function get(object: Record<string, unknown>, path = '', defaultValue = '') {
+  const keys = path.split('.');
+
+  let value = object;
+  for (const key of keys) {
+    // Check if the current key exists in the current value
+    if (value && typeof value === 'object' && key in value) {
+      // Update the value to the nested property
+      value = value[key] as Record<string, unknown>;
+    } else {
+      // If the key does not exist, return the default value
+      return defaultValue;
+    }
+  }
+
+  return value !== undefined ? value : defaultValue;
 }
