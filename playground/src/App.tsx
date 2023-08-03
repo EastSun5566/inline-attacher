@@ -7,7 +7,7 @@ import {
   attach,
   inlineAttachmentExtension,
   // eslint-disable-next-line import/no-relative-packages
-} from '../../src/main';
+} from '../../dist/inline-attachment-next';
 
 // TODO: fix typing
 const options: Partial<InlineAttachmentOptions> = {
