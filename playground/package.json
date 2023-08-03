@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@codemirror/view": "^6.16.0",
     "solid-js": "^1.7.8"
   },
   "devDependencies": {

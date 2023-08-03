@@ -8,7 +8,7 @@ import {
 } from './utils';
 
 export class InlineAttachment<TInstance> {
-  options: InlineAttachmentOptions = DEFAULT_OPTIONS;
+  options = DEFAULT_OPTIONS;
 
   editor: Editor<TInstance>;
 
