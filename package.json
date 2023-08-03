@@ -47,9 +47,11 @@
   "engines": {
     "node": ">=16.0.0"
   },
+  "peerDependencies": {
+    "@codemirror/view": ">=6.0.0"
+  },
   "devDependencies": {
     "@codemirror/state": "^6.2.1",
-    "@codemirror/view": "^6.16.0",
     "@types/node": "^20.4.6",
     "@typescript-eslint/eslint-plugin": "^6.2.1",
     "@typescript-eslint/parser": "^6.2.1",
@@ -60,5 +62,8 @@
     "typescript": "^5.1.6",
     "vite": "^4.4.8",
     "vite-plugin-dts": "^3.4.0"
+  },
+  "dependencies": {
+    "@codemirror/view": "^6.16.0"
   }
 }

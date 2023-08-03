@@ -12,6 +12,14 @@ export default defineConfig({
       name: name.replace(/-(.)/g, ($1) => $1.toUpperCase()).replace(/-/g, ''),
       fileName: name,
     },
+    rollupOptions: {
+      external: ['@codemirror/view'],
+      output: {
+        globals: {
+          '@codemirror/view': 'CodemirrorView',
+        },
+      },
+    },
   },
   plugins: [dts({
     insertTypesEntry: true,

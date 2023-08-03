@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { EditorView } from '@codemirror/view';
 import type { Extension } from '@codemirror/state';
 
