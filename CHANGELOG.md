@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.6](https://github.com/EastSun5566/inline-attachment/compare/v0.0.5...v0.0.6) (2023-08-05)
+
+
+### Features
+
+* add editor to playground ([b3b6f83](https://github.com/EastSun5566/inline-attachment/commit/b3b6f838ec0edf71a7504f0f076838e9d3308ae2))
+* **playground:** add markdown parser ([29b30d1](https://github.com/EastSun5566/inline-attachment/commit/29b30d1a5584ec0c5ba7041a3df6aaf28bea10b7))
+* update some namings ([8d147c5](https://github.com/EastSun5566/inline-attachment/commit/8d147c595ab6404f4cc76752d41a527fca9f59da))
+
+
+### Bug Fixes
+
+* `@codemirror/view` should not include in buddle ([1d375ce](https://github.com/EastSun5566/inline-attachment/commit/1d375ce941beaccb55ef45f1b46d8651aeebf8ee))
+
 ### [0.0.5](https://github.com/EastSun5566/inline-attachment/compare/v0.0.4...v0.0.5) (2023-08-01)
 
 
