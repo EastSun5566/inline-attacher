@@ -1,4 +1,10 @@
 {
   "extends": "./tsconfig.json",
-  "include": ["src", ".eslintrc.cjs", "vite.config.ts", "playground/src"]
+  "include": [
+    "src",
+    ".eslintrc.cjs",
+    "vite.config.ts",
+    "playground/src",
+    "playground/vite.config.ts"
+  ]
 }
