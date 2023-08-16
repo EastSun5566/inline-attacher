@@ -1,14 +1,14 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { resolve } from 'node:path';
 import { defineConfig } from 'vite';
-import dts from 'vite-plugin-dts';
 
 import { name } from './package.json';
 
 export default defineConfig({
   build: {
+    emptyOutDir: false,
     lib: {
-      entry: resolve(__dirname, 'src/main.ts'),
+      entry: resolve(__dirname, 'src'),
       name: name.replace(/-(.)/g, ($1) => $1.toUpperCase()).replace(/-/g, ''),
       fileName: name,
     },
@@ -21,7 +21,4 @@ export default defineConfig({
       },
     },
   },
-  plugins: [dts({
-    insertTypesEntry: true,
-  })],
 });
