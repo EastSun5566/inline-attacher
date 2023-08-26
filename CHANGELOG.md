@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.7](https://github.com/EastSun5566/inline-attachment/compare/v0.0.6...v0.0.7) (2023-08-26)
+
+
+### Features
+
+* **playground:** add meta tags ([20ff6cb](https://github.com/EastSun5566/inline-attachment/commit/20ff6cb778163c23c419ebc046a0fb2444f5ffec))
+* use `tsc` gen types instead ([4991aff](https://github.com/EastSun5566/inline-attachment/commit/4991aff03b684df331c1ea7dc19f335765b53cb0))
+
 ### [0.0.6](https://github.com/EastSun5566/inline-attachment/compare/v0.0.5...v0.0.6) (2023-08-05)
 
 
