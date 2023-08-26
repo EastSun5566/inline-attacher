@@ -3,7 +3,7 @@ import { createSignal, onMount } from 'solid-js';
 // import snarkdown from 'snarkdown';
 
 // eslint-disable-next-line import/no-relative-packages
-import { attach } from '../../../dist/inline-attacher';
+import { attach } from '../../../src';
 import { OPTIONS } from '../constants';
 
 export function Textarea() {

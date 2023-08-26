@@ -3,6 +3,6 @@ import { defineConfig } from 'vite';
 import solid from 'vite-plugin-solid';
 
 export default defineConfig({
-  base: '/inline-attachment/',
+  base: '/inline-attacher/',
   plugins: [solid()],
 });

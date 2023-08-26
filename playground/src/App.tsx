@@ -5,7 +5,7 @@ import './App.css';
 import { Textarea } from './components/Textarea';
 
 // eslint-disable-next-line import/no-relative-packages
-import { inlineAttachmentExtension } from '../../dist/inline-attacher';
+import { inlineAttachmentExtension } from '../../src';
 import { OPTIONS } from './constants';
 
 export function App() {
@@ -23,7 +23,7 @@ export function App() {
 
   return (
     <>
-      <h1>📎 Inline Attachment</h1>
+      <h1>📎 Inline Attacher</h1>
 
       <Textarea />
 
