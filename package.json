@@ -1,18 +1,18 @@
 {
-  "name": "inline-attachment-next",
+  "name": "inline-attacher",
   "version": "0.0.6",
   "description": "📎 A modern port from Inline Attachment",
   "type": "module",
   "files": [
     "dist"
   ],
-  "main": "./dist/inline-attachment-next.umd.cjs",
-  "module": "./dist/inline-attachment-next.js",
+  "main": "./dist/inline-attacher.umd.cjs",
+  "module": "./dist/inline-attacher.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/inline-attachment-next.js",
-      "require": "./dist/inline-attachment-next.umd.cjs"
+      "import": "./dist/inline-attacher.js",
+      "require": "./dist/inline-attacher.umd.cjs"
     }
   },
   "scripts": {
@@ -45,7 +45,8 @@
   "homepage": "https://github.com/EastSun5566/inline-attachment",
   "packageManager": "pnpm@8.6.0",
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=16.0.0",
+    "pnpm": ">=7.0.0"
   },
   "peerDependencies": {
     "@codemirror/view": ">=6.0.0"

@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-relative-packages
-import { type InlineAttachmentOptions } from '../../dist/inline-attachment-next';
+import { type InlineAttachmentOptions } from '../../dist/inline-attacher';
 
 // TODO: fix typing
 // eslint-disable-next-line import/prefer-default-export

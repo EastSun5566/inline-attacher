@@ -5,7 +5,7 @@ import './App.css';
 import { Textarea } from './components/Textarea';
 
 // eslint-disable-next-line import/no-relative-packages
-import { inlineAttachmentExtension } from '../../dist/inline-attachment-next';
+import { inlineAttachmentExtension } from '../../dist/inline-attacher';
 import { OPTIONS } from './constants';
 
 export function App() {
