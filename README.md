@@ -1,8 +1,8 @@
-# 📎 Inline Attachment Next (WIP)
+# 📎 Inline Attacher (WIP)
 
 [![NPM Version](https://img.shields.io/npm/v/inline-attacher.svg?style=for-the-badge)](https://www.npmjs.com/package/inline-attacher)
 [![NPM Downloads](https://img.shields.io/npm/dt/inline-attacher.svg?style=for-the-badge)](https://www.npmjs.com/package/inline-attacher)
-[![License](https://img.shields.io/github/license/EastSun5566/inline-attachment.svg?style=for-the-badge)](https://github.com/EastSun5566/inline-attachment/blob/main/LICENSE)
+[![License](https://img.shields.io/github/license/EastSun5566/inline-attacher.svg?style=for-the-badge)](https://github.com/EastSun5566/inline-attacher/blob/main/LICENSE)
 
 > A modern port of [Inline Attachment](https://github.com/Rovak/InlineAttachment)
 
