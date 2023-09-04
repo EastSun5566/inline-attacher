@@ -1,14 +1,12 @@
 import { createSignal, onMount } from 'solid-js';
-// import { template } from 'solid-js/web';
-// import snarkdown from 'snarkdown';
 
+import { MarkdownPreview } from './MarkdownPreview';
 // eslint-disable-next-line import/no-relative-packages
 import { attach } from '../../../src';
 import { OPTIONS } from '../constants';
 
 export function Textarea() {
-  const [value, setValue] = createSignal('Paste/Drop image here\n\n');
-  // const html = () => template(snarkdown(value()));
+  const [markdownValue, setMarkdownValue] = createSignal('Paste/Drop image here\n');
 
   let textareaRef: HTMLTextAreaElement;
   onMount(() => {
@@ -19,19 +17,21 @@ export function Textarea() {
     <>
       <section>
         <h2>Textarea</h2>
-        <textarea
-          ref={textareaRef!}
-          value={value()}
-          onInput={({ target }) => setValue(target.value)}
-          style={{ resize: 'none' }}
-          cols="30"
-          rows="5"
-        />
+
+        <div style={{ display: 'flex' }}>
+          <textarea
+            ref={textareaRef!}
+            value={markdownValue()}
+            onInput={({ target }) => setMarkdownValue(target.value)}
+            style={{ resize: 'none', 'margin-right': '1rem' }}
+            cols="30"
+            rows="5"
+          />
+
+          <MarkdownPreview markdown={markdownValue()} />
+        </div>
       </section>
 
-      <section>
-        {/* {html()} */}
-      </section>
     </>
   );
 }
