@@ -1,0 +1,5 @@
+{
+  "name": "@eastsun5566/inline-attacher",
+  "version": "0.0.7",
+  "exports": "./src/index.ts"
+}
