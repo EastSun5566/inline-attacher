@@ -77,7 +77,7 @@ export class CodeMirrorInlineAttachmentAdapter<
   }
 }
 
-export function attachCodeMirror(...params: [EditorView, Partial<InlineAttachmentOptions>?]) {
+export function attachCodeMirror(...params: [EditorView, Partial<InlineAttachmentOptions>?]): void {
   return new CodeMirrorInlineAttachmentAdapter(...params).bind();
 }
 

@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import { InlineAttachment } from '../core';
 import type { Editor, InlineAttachmentOptions } from '../types';
 
@@ -108,6 +109,6 @@ export class InputInlineAttachmentAdapter<
   }
 }
 
-export function attach(...params: [InputElement, Partial<InlineAttachmentOptions>?]) {
+export function attach(...params: [InputElement, Partial<InlineAttachmentOptions>?]): void {
   return new InputInlineAttachmentAdapter(...params).bind();
 }
