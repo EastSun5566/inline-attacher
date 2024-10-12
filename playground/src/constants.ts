@@ -1,6 +1,8 @@
 // eslint-disable-next-line import/no-relative-packages
 import { type InlineAttachmentOptions } from '../../src';
 
+export const DEFAULT_MARKDOWN = '> Paste/Drop image here\n\n\n';
+
 // TODO: fix typing
 // eslint-disable-next-line import/prefer-default-export
 export const OPTIONS: Partial<InlineAttachmentOptions> = {

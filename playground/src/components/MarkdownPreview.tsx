@@ -1,19 +1,25 @@
-import { createEffect } from 'solid-js';
+import { createEffect, type JSX } from 'solid-js';
 import parse from 'snarkdown';
-import { innerHTML } from 'diffhtml';
+// import { innerHTML } from 'diffhtml';
 
 interface MarkdownPreviewProps {
+  style: string | JSX.CSSProperties | undefined;
   markdown: string;
 }
 
 export function MarkdownPreview(props: MarkdownPreviewProps) {
-  let previewRef: HTMLDivElement;
+  let previewRef: HTMLDivElement | null = null;
   createEffect(() => {
     const html = parse(props.markdown);
-    innerHTML(previewRef, html);
+    // innerHTML(previewRef, html);
+    previewRef!.innerHTML = html;
   });
 
-  return <div ref={previewRef!} />;
+  return (
+  <div
+    style={props.style}
+    ref={(ref) => { previewRef = ref; }} />
+  );
 }
 
 export default MarkdownPreview;

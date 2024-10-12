@@ -3,14 +3,14 @@ import { createSignal, onMount } from 'solid-js';
 import { MarkdownPreview } from './MarkdownPreview';
 // eslint-disable-next-line import/no-relative-packages
 import { attach } from '../../../src';
-import { OPTIONS } from '../constants';
+import { DEFAULT_MARKDOWN, OPTIONS } from '../constants';
 
 export function Textarea() {
-  const [markdownValue, setMarkdownValue] = createSignal('Paste/Drop image here\n');
+  const [markdownValue, setMarkdownValue] = createSignal(DEFAULT_MARKDOWN);
 
-  let textareaRef: HTMLTextAreaElement;
+  let textareaRef: HTMLTextAreaElement | null = null;
   onMount(() => {
-    attach(textareaRef, OPTIONS);
+    attach(textareaRef!, OPTIONS);
   });
 
   return (
@@ -18,17 +18,22 @@ export function Textarea() {
       <section>
         <h2>Textarea</h2>
 
-        <div style={{ display: 'flex' }}>
-          <textarea
-            ref={textareaRef!}
-            value={markdownValue()}
-            onInput={({ target }) => setMarkdownValue(target.value)}
-            style={{ resize: 'none', 'margin-right': '1rem' }}
-            cols="30"
-            rows="5"
-          />
+        <div style={{ display: 'flex', gap: '1rem' }}>
+          <div style={{ width: '50%' }}>
+            <textarea
+              ref={(ref) => { textareaRef = ref; }}
+              value={markdownValue()}
+              onInput={({ target }) => setMarkdownValue(target.value)}
+              style={{ resize: 'none', width: '100%' }}
+              cols="30"
+              rows="5"
+            />
+          </div>
 
-          <MarkdownPreview markdown={markdownValue()} />
+          <MarkdownPreview
+            style={{ width: '50%' }}
+            markdown={markdownValue()}
+          />
         </div>
       </section>
 

@@ -1,36 +1,18 @@
-import { onMount } from 'solid-js';
-import { EditorView } from '@codemirror/view';
-
 import './App.css';
 import { Textarea } from './components/Textarea';
-
-// eslint-disable-next-line import/no-relative-packages
-import { inlineAttachmentExtension } from '../../src';
-import { OPTIONS } from './constants';
+import { CodeMirrorEditor } from './components/CodeMirrorEditor';
 
 export function App() {
-  let editorRef: HTMLDivElement;
-
-  onMount(() => {
-    new EditorView({
-      doc: 'Paste/Drop image here\n\n',
-      extensions: [
-        inlineAttachmentExtension(OPTIONS),
-      ],
-      parent: editorRef,
-    });
-  });
-
   return (
     <>
       <h1>📎 Inline Attacher</h1>
 
       <Textarea />
 
-      <section>
-        <h2>CodeMirror v6</h2>
-        <div ref={editorRef!}></div>
-      </section>
+      <br />
+      <hr />
+
+      <CodeMirrorEditor />
     </>
   );
 }
