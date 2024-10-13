@@ -23,7 +23,7 @@
     "playground:deploy": "pnpm -C playground deploy",
     "lint": "eslint --fix --ext .ts src",
     "prepublishOnly": "pnpm build",
-    "release": "pnpx standard-version && git push --follow-tags && pnpm publish && pnpm dlx jsr publish",
+    "release": "pnpx standard-version && git push --follow-tags && pnpm publish",
     "size-check": "pnpx vite-bundle-visualizer"
   },
   "keywords": [
