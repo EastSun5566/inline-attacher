@@ -5,14 +5,22 @@ import { CodeMirrorEditor } from './components/CodeMirrorEditor';
 export function App() {
   return (
     <>
-      <h1>📎 Inline Attacher</h1>
+      <h2 style={{ 'text-align': 'center' }}>📎 Inline Attacher</h2>
 
-      <Textarea />
+      <main>
+        <Textarea />
 
-      <br />
-      <hr />
+        <br />
+        <hr />
 
-      <CodeMirrorEditor />
+        <CodeMirrorEditor />
+      </main>
+
+      <footer style={{ 'text-align': 'right', 'margin-top': '2rem' }}>
+          <a href="https://github.com/EastSun5566/inline-attacher" target="_blank" rel="noreferrer">
+            <em>repo</em>
+          </a>
+      </footer>
     </>
   );
 }

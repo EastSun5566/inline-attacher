@@ -56,7 +56,7 @@ export function CodeMirrorEditor() {
 
   return (
     <section>
-      <h2>CodeMirror v6</h2>
+      <h4>CodeMirror v6</h4>
 
       <div style={{ display: 'flex', gap: '1rem' }}>
         <div

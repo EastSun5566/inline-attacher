@@ -16,7 +16,7 @@ export function Textarea() {
   return (
     <>
       <section>
-        <h2>Textarea</h2>
+        <h4>Textarea</h4>
 
         <div style={{ display: 'flex', gap: '1rem' }}>
           <div style={{ width: '50%' }}>
