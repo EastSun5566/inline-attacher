@@ -20,7 +20,7 @@
     "build": "rimraf dist && tsc && vite build",
     "preview": "vite preview",
     "playground:dev": "pnpm -C playground dev",
-    "playground:deploy": "pnpm -C playground deploy",
+    "playground:deploy": "pnpm -C playground run deploy",
     "lint": "eslint --fix --ext .ts src",
     "prepublishOnly": "pnpm build",
     "release": "pnpx standard-version && git push --follow-tags && pnpm publish",
