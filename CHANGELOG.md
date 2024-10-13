@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.8](https://github.com/EastSun5566/inline-attachment/compare/v0.0.7...v0.0.8) (2024-10-13)
+
+
+### Features
+
+* drop support ie ([25a1802](https://github.com/EastSun5566/inline-attachment/commit/25a18022b0037053361c0a10ae29e073132b2b2e))
+* **playground:** add markdown preview ([5fd4722](https://github.com/EastSun5566/inline-attachment/commit/5fd472223739922e9609d4365085997f14f74d0b))
+
+
+### Bug Fixes
+
+* prevent default paste event break ([5ef61ba](https://github.com/EastSun5566/inline-attachment/commit/5ef61baaa518e6b69babaa2de4355aefd4f35f30))
+* simplify drag & drop events ([c7a2557](https://github.com/EastSun5566/inline-attachment/commit/c7a25571ade691c7c64a3c8dd0d0a08993afa350))
+
 ### [0.0.7](https://github.com/EastSun5566/inline-attachment/compare/v0.0.6...v0.0.7) (2023-08-26)
 
 

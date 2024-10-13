@@ -1,6 +1,6 @@
 {
   "name": "inline-attacher",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "📎 A modern port from Inline Attachment",
   "type": "module",
   "files": [
