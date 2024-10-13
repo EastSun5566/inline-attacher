@@ -7,42 +7,19 @@ type InputElement = HTMLInputElement | HTMLTextAreaElement;
 /** Inserts the given value at the current cursor position of the textarea element */
 function insertTextAtCursor(element: InputElement, text: string) {
   const scrollPos = element.scrollTop;
-  let strPos = 0;
-  let browser: string | false = false;
-  let range;
+  const strPos = element.selectionStart || 0;
 
-  if ((element.selectionStart || element.selectionStart === 0)) {
-    browser = 'ff';
-  } else if ((document as any).selection) {
-    browser = 'ie';
-  }
-
-  if (browser === 'ie') {
-    element.focus();
-    range = (document as any).selection.createRange();
-    range.moveStart('character', -element.value.length);
-    strPos = range.text.length;
-  } else if (browser === 'ff') {
-    strPos = element.selectionStart || 0;
-  }
-
-  const front = (element.value).substring(0, strPos);
-  const back = (element.value).substring(strPos, element.value.length);
+  const { value } = element;
+  const front = value.slice(0, strPos);
+  const back = value.slice(strPos, value.length);
   element.value = front + text + back;
-  strPos += text.length;
-  if (browser === 'ie') {
-    element.focus();
-    range = (document as any).selection.createRange();
-    range.moveStart('character', -element.value.length);
-    range.moveStart('character', strPos);
-    range.moveEnd('character', 0);
-    range.select();
-  } else if (browser === 'ff') {
-    element.selectionStart = strPos;
-    element.selectionEnd = strPos;
-    element.focus();
-  }
+
+  const newPos = strPos + text.length;
+  element.selectionStart = newPos;
+  element.selectionEnd = newPos;
+
   element.scrollTop = scrollPos;
+  element.focus();
 }
 
 class InputEditor<TInstance extends InputElement> implements Editor<TInstance> {
@@ -58,10 +35,19 @@ class InputEditor<TInstance extends InputElement> implements Editor<TInstance> {
 
   insertValue(value: string) {
     insertTextAtCursor(this.instance, value);
+    this.dispatchInputEvent();
   }
 
   setValue(value: string) {
     this.instance.value = value;
+    this.dispatchInputEvent();
+  }
+
+  dispatchInputEvent() {
+    this.instance.dispatchEvent(new InputEvent('input', {
+      bubbles: true,
+      cancelable: true,
+    }));
   }
 }
 
@@ -78,7 +64,6 @@ export class InputInlineAttachmentAdapter<
       (event) => {
         this.onPaste(event as ClipboardEvent);
       },
-      false,
     );
 
     this.editor.instance.addEventListener(
@@ -88,7 +73,6 @@ export class InputInlineAttachmentAdapter<
         event.preventDefault();
         this.onDrop(event as DragEvent);
       },
-      false,
     );
 
     this.editor.instance.addEventListener(
