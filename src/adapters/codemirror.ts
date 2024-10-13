@@ -45,7 +45,6 @@ export class CodeMirrorInlineAttachmentAdapter<
       (event) => {
         this.onPaste(event);
       },
-      false,
     );
 
     this.editor.instance.dom.addEventListener(
@@ -56,7 +55,6 @@ export class CodeMirrorInlineAttachmentAdapter<
 
         this.onDrop(event);
       },
-      false,
     );
 
     this.editor.instance.dom.addEventListener(

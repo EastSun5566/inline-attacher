@@ -137,7 +137,6 @@ export class InlineAttachment<TInstance> {
    * Called when a paste event occurred
    */
   onPaste(event: ClipboardEvent) {
-    event.preventDefault();
     if (!event.clipboardData?.files.length) return;
 
     this.handleFiles(event.clipboardData.files);
@@ -147,7 +146,6 @@ export class InlineAttachment<TInstance> {
    * Called when a drop event occurred
    */
   onDrop(event: DragEvent) {
-    event.preventDefault();
     if (!event.dataTransfer?.files.length) return;
 
     this.handleFiles(event.dataTransfer.files);
