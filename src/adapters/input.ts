@@ -69,24 +69,15 @@ export class InputInlineAttachmentAdapter<
     this.editor.instance.addEventListener(
       'drop',
       (event) => {
-        event.stopPropagation();
         event.preventDefault();
-        this.onDrop(event as DragEvent);
-      },
-    );
 
-    this.editor.instance.addEventListener(
-      'dragenter',
-      (event) => {
-        event.stopPropagation();
-        event.preventDefault();
+        this.onDrop(event as DragEvent);
       },
     );
 
     this.editor.instance.addEventListener(
       'dragover',
       (event) => {
-        event.stopPropagation();
         event.preventDefault();
       },
     );

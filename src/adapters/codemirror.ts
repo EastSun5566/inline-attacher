@@ -50,7 +50,6 @@ export class CodeMirrorInlineAttachmentAdapter<
     this.editor.instance.dom.addEventListener(
       'drop',
       (event) => {
-        event.stopPropagation();
         event.preventDefault();
 
         this.onDrop(event);
@@ -58,17 +57,8 @@ export class CodeMirrorInlineAttachmentAdapter<
     );
 
     this.editor.instance.dom.addEventListener(
-      'dragenter',
-      (event) => {
-        event.stopPropagation();
-        event.preventDefault();
-      },
-    );
-
-    this.editor.instance.dom.addEventListener(
       'dragover',
       (event) => {
-        event.stopPropagation();
         event.preventDefault();
       },
     );
