@@ -19,6 +19,9 @@
     "dev": "vite",
     "build": "rimraf dist && tsc && vite build",
     "preview": "vite preview",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage",
     "playground:dev": "pnpm -C playground dev",
     "playground:deploy": "pnpm -C playground run deploy",
     "lint": "eslint --fix --ext .ts src",
@@ -57,13 +60,16 @@
     "@types/node": "^20.16.11",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
+    "@vitest/ui": "^4.0.16",
     "eslint": "^8.57.1",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-airbnb-typescript": "^17.1.0",
     "eslint-plugin-import": "^2.31.0",
+    "happy-dom": "^15.11.7",
     "rimraf": "^5.0.10",
     "typescript": "^5.6.3",
-    "vite": "^4.5.5"
+    "vite": "^7.3.0",
+    "vitest": "^4.0.16"
   },
   "dependencies": {
     "@codemirror/view": "^6.34.1"
