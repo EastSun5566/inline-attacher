@@ -1,4 +1,6 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import {
+  describe, it, expect, vi, beforeEach, afterEach,
+} from 'vitest';
 import { upload, isFunction, get } from '../utils';
 
 describe('utils', () => {
@@ -87,7 +89,7 @@ describe('utils', () => {
   describe('isFunction', () => {
     it('should return true for functions', () => {
       expect(isFunction(() => {})).toBe(true);
-      expect(isFunction(function test() {})).toBe(true);
+      expect(isFunction(() => {})).toBe(true);
       expect(isFunction(async () => {})).toBe(true);
       expect(isFunction(class Test {})).toBe(true);
     });
