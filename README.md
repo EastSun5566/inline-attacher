@@ -28,7 +28,7 @@ npm i inline-attacher
 - CodeMirror v6
 
   ```ts
-  import { EditorView } from "codemirror";
+  import { EditorView } from "@codemirror/view";
   import { inlineAttachmentExtension } from "inline-attacher";
 
   const editor = new EditorView({
