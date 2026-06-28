@@ -25,8 +25,8 @@
     "playground:deploy": "pnpm -C playground run deploy",
     "lint": "eslint --fix --ext .ts src",
     "prepublishOnly": "pnpm build",
-    "release": "pnpx standard-version && git push --follow-tags && pnpm publish",
-    "size-check": "pnpx vite-bundle-visualizer"
+    "release": "npx standard-version && git push --follow-tags && npm publish",
+    "size-check": "npx vite-bundle-visualizer"
   },
   "keywords": [
     "inline-attachment",
