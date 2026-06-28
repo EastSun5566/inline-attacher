@@ -19,7 +19,7 @@
     "dev": "vite",
     "build": "rimraf dist && tsc && vite build",
     "preview": "vite preview",
-    "test": "vitest",
+    "test": "vitest run",
     "playground:dev": "pnpm -C playground dev",
     "playground:deploy": "pnpm -C playground run deploy",
     "lint": "eslint --fix --ext .ts src",
