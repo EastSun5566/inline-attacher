@@ -6,8 +6,7 @@ import {
 import { defaultKeymap, history, historyKeymap } from '@codemirror/commands';
 import { defaultHighlightStyle, syntaxHighlighting } from '@codemirror/language';
 
-// eslint-disable-next-line import/no-relative-packages
-import { inlineAttachmentExtension } from '../../../src';
+import { inlineAttachmentExtension } from 'inline-attacher';
 import MarkdownPreview from './MarkdownPreview';
 import { DEFAULT_MARKDOWN, OPTIONS } from '../constants';
 

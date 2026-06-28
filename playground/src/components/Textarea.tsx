@@ -1,8 +1,7 @@
 import { createSignal, onMount } from 'solid-js';
 
 import { MarkdownPreview } from './MarkdownPreview';
-// eslint-disable-next-line import/no-relative-packages
-import { attach } from '../../../src';
+import { attach } from 'inline-attacher';
 import { DEFAULT_MARKDOWN, OPTIONS } from '../constants';
 
 export function Textarea() {

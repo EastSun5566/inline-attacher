@@ -1,5 +1,4 @@
-// eslint-disable-next-line import/no-relative-packages
-import { type InlineAttachmentOptions } from '../../src';
+import { type InlineAttachmentOptions } from 'inline-attacher';
 
 export const DEFAULT_MARKDOWN = '> Paste/Drop image here\n\n\n';
 

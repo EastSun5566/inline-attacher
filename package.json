@@ -55,7 +55,7 @@
     "@codemirror/view": ">=6.0.0"
   },
   "devDependencies": {
-    "@codemirror/state": "^6.4.1",
+    "@codemirror/state": "^6.7.0",
     "@types/node": "^22.20.0",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
@@ -70,6 +70,6 @@
     "vitest": "^4.0.16"
   },
   "dependencies": {
-    "@codemirror/view": "^6.34.1"
+    "@codemirror/view": "^6.43.4"
   }
 }
