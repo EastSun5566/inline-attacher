@@ -26,6 +26,7 @@
     "lint": "eslint --fix --ext .ts src",
     "prepublishOnly": "pnpm build",
     "release": "npx standard-version && git push --follow-tags && npm publish",
+    "publish:jsr": "npx jsr publish",
     "size-check": "npx vite-bundle-visualizer"
   },
   "keywords": [
