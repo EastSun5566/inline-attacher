@@ -36,7 +36,7 @@
     "image",
     "file"
   ],
-  "author": "Michael Wang 汪東陽 <michael19920327@gmail.com> (https://github.com/EastSun5566)",
+  "author": "Michael Wang <hi@eastsun.me> (https://github.com/EastSun5566)",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -64,7 +64,7 @@
     "eslint-plugin-import": "^2.31.0",
     "happy-dom": "^20.0.2",
     "rimraf": "^5.0.10",
-    "typescript": "^5.6.3",
+    "typescript": "^6.0.2",
     "vite": "^7.3.0",
     "vitest": "^4.0.16"
   },
