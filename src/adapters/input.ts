@@ -7,14 +7,17 @@ type InputElement = HTMLInputElement | HTMLTextAreaElement;
 /** Inserts the given value at the current cursor position of the textarea element */
 function insertTextAtCursor(element: InputElement, text: string) {
   const scrollPos = element.scrollTop;
-  const strPos = element.selectionStart || 0;
+  const selectionStart = element.selectionStart ?? 0;
+  const selectionEnd = element.selectionEnd ?? selectionStart;
+  const start = Math.min(selectionStart, selectionEnd);
+  const end = Math.max(selectionStart, selectionEnd);
 
   const { value } = element;
-  const front = value.slice(0, strPos);
-  const back = value.slice(strPos, value.length);
+  const front = value.slice(0, start);
+  const back = value.slice(end, value.length);
   element.value = front + text + back;
 
-  const newPos = strPos + text.length;
+  const newPos = start + text.length;
   element.selectionStart = newPos;
   element.selectionEnd = newPos;
 

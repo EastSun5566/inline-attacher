@@ -62,6 +62,19 @@ describe('InputInlineAttachmentAdapter', () => {
       expect(textarea.selectionEnd).toBe(11);
     });
 
+    it('should replace selected text when inserting value', () => {
+      const adapter = new InputInlineAttachmentAdapter(textarea);
+      textarea.value = 'Hello World';
+      textarea.selectionStart = 6;
+      textarea.selectionEnd = 11;
+
+      adapter.editor.insertValue('there');
+
+      expect(textarea.value).toBe('Hello there');
+      expect(textarea.selectionStart).toBe(11);
+      expect(textarea.selectionEnd).toBe(11);
+    });
+
     it('should insert value at beginning when no selection', () => {
       const adapter = new InputInlineAttachmentAdapter(textarea);
       textarea.value = 'World';
