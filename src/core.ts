@@ -32,6 +32,7 @@ export class InlineAttachment<TInstance> {
       uploadUrl,
       uploadMethod,
       beforeFileUpload,
+      uploadHandler,
     } = this.options;
 
     const formData = new FormData();
@@ -55,6 +56,21 @@ export class InlineAttachment<TInstance> {
     });
 
     if (!beforeFileUpload?.(formData)) return;
+
+    if (uploadHandler) {
+      try {
+        const response = await uploadHandler({
+          file,
+          filename,
+          formData,
+          options: this.options,
+        });
+        this.onFileUploadSucceed(response);
+      } catch (error) {
+        this.onFileUploadError(error instanceof Error ? error : new Error(String(error)));
+      }
+      return;
+    }
 
     const { ok, value } = await upload({
       url: uploadUrl,

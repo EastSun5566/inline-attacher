@@ -38,3 +38,27 @@ npm i inline-attacher
     parent: document.body,
   });
   ```
+
+- Custom upload handler
+
+  ```ts
+  import { attach } from "inline-attacher";
+
+  const textarea = document.querySelector("textarea");
+
+  attach(textarea, {
+    async uploadHandler({ file, filename, formData }) {
+      const response = await myUploader.upload({
+        file,
+        filename,
+        formData,
+      });
+
+      return { url: response.publicUrl };
+    },
+  });
+  ```
+
+  The returned object is handled the same way as the built-in upload response:
+  `responseUrlKey` is used to read the uploaded file URL before replacing the
+  placeholder text.

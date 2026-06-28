@@ -11,6 +11,7 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/inline-attacher.js",
       "require": "./dist/inline-attacher.umd.cjs"
     }

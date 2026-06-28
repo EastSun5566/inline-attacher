@@ -1,3 +1,10 @@
+export interface UploadHandlerContext {
+  file: File
+  filename: string
+  formData: FormData
+  options: InlineAttachmentOptions
+}
+
 export interface InlineAttachmentOptions {
   uploadUrl: string
   uploadMethod: string
@@ -11,6 +18,9 @@ export interface InlineAttachmentOptions {
   extraParams: { [name: string]: any }
   extraHeaders: { [name: string]: any }
   beforeFileUpload?: (formData: FormData) => boolean
+  uploadHandler?: (
+    context: UploadHandlerContext,
+  ) => Promise<Record<string, unknown>> | Record<string, unknown>
   remoteFilename?: (file: File) => string
   onFileReceived?: (file: File) => boolean
   onFileUploadSucceed?: (response: Record<string, unknown>) => boolean

@@ -2,7 +2,7 @@ import {
   describe, it, expect, vi, beforeEach,
 } from 'vitest';
 import { InlineAttachment } from '../core';
-import { Editor } from '../types';
+import { Editor, UploadHandlerContext } from '../types';
 
 describe('InlineAttachment', () => {
   let mockEditor: Editor<any>;
@@ -281,13 +281,72 @@ describe('InlineAttachment', () => {
 
     it('should not upload if beforeFileUpload returns false', async () => {
       const beforeFileUpload = vi.fn(() => false);
-      const attachment = new InlineAttachment(mockEditor, { beforeFileUpload });
+      const uploadHandler = vi.fn(async () => ({ url: 'custom.png' }));
+      const attachment = new InlineAttachment(mockEditor, { beforeFileUpload, uploadHandler });
 
       const file = new File(['content'], 'test.png', { type: 'image/png' });
       await attachment.uploadFile(file);
 
       expect(beforeFileUpload).toHaveBeenCalled();
+      expect(uploadHandler).not.toHaveBeenCalled();
       expect(global.fetch).not.toHaveBeenCalled();
+    });
+
+    it('should use uploadHandler response without calling fetch', async () => {
+      const uploadHandler = vi.fn(async (_context: UploadHandlerContext) => ({
+        url: 'https://example.com/custom.png',
+      }));
+      const attachment = new InlineAttachment(mockEditor, {
+        remoteFilename: () => 'test.png',
+        uploadHandler,
+      });
+      attachment.lastValue = '![Uploading file...]()';
+      (mockEditor.getValue as any).mockReturnValue('Text ![Uploading file...]()');
+
+      const file = new File(['content'], 'test.png', { type: 'image/png' });
+      await attachment.uploadFile(file);
+
+      expect(uploadHandler).toHaveBeenCalledTimes(1);
+      expect(global.fetch).not.toHaveBeenCalled();
+      expect(mockEditor.setValue).toHaveBeenCalledWith(
+        'Text ![test.png](https://example.com/custom.png)',
+      );
+    });
+
+    it('should pass upload context to uploadHandler', async () => {
+      const uploadHandler = vi.fn(async (_context: UploadHandlerContext) => ({ url: 'test.png' }));
+      const attachment = new InlineAttachment(mockEditor, {
+        uploadFieldName: 'image',
+        extraParams: { token: 'abc' },
+        remoteFilename: () => 'test.png',
+        uploadHandler,
+      });
+      attachment.lastValue = '![Uploading file...]()';
+      (mockEditor.getValue as any).mockReturnValue('![Uploading file...]()');
+
+      const file = new File(['content'], 'test.png', { type: 'image/png' });
+      await attachment.uploadFile(file);
+
+      const context = uploadHandler.mock.calls[0]![0];
+      expect(context.file).toBe(file);
+      expect(context.filename).toBe('test.png');
+      expect(context.formData).toBeInstanceOf(FormData);
+      expect(context.formData.get('image')).toBeInstanceOf(File);
+      expect(context.formData.get('token')).toBe('abc');
+      expect(context.options).toBe(attachment.options);
+    });
+
+    it('should send uploadHandler errors to onFileUploadError', async () => {
+      const uploadHandler = vi.fn(() => Promise.reject('Upload failed'));
+      const attachment = new InlineAttachment(mockEditor, { uploadHandler });
+      const onFileUploadError = vi.spyOn(attachment, 'onFileUploadError');
+
+      const file = new File(['content'], 'test.png', { type: 'image/png' });
+      await attachment.uploadFile(file);
+
+      expect(global.fetch).not.toHaveBeenCalled();
+      expect(onFileUploadError).toHaveBeenCalledWith(expect.any(Error));
+      expect(onFileUploadError.mock.calls[0][0].message).toBe('Upload failed');
     });
 
     it('should handle upload errors', async () => {
