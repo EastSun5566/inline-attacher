@@ -1,7 +1,7 @@
 import {
   describe, it, expect, vi, beforeEach, afterEach,
 } from 'vitest';
-import { upload, isFunction, get } from '../utils';
+import { upload, isFunction, get } from '../src/utils';
 
 describe('utils', () => {
   describe('upload', () => {

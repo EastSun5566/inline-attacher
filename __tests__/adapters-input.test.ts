@@ -1,7 +1,7 @@
 import {
   describe, it, expect, vi, beforeEach,
 } from 'vitest';
-import { InputInlineAttachmentAdapter, attach } from '../adapters/input';
+import { InputInlineAttachmentAdapter, attach } from '../src/adapters/input';
 
 describe('InputInlineAttachmentAdapter', () => {
   let textarea: HTMLTextAreaElement;

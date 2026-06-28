@@ -2,8 +2,10 @@
   "extends": "./tsconfig.json",
   "include": [
     "src",
+    "__tests__",
     ".eslintrc.cjs",
     "vite.config.ts",
+    "vitest.config.ts",
     "playground/src",
     "playground/vite.config.ts"
   ]

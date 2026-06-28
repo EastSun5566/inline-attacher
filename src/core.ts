@@ -12,7 +12,12 @@ interface UploadPlaceholder {
   text: string
 }
 
-function replaceOccurrence(text: string, searchValue: string, replaceValue: string, occurrenceIndex = 0) {
+function replaceOccurrence(
+  text: string,
+  searchValue: string,
+  replaceValue: string,
+  occurrenceIndex = 0,
+) {
   let fromIndex = 0;
 
   for (let index = 0; index <= occurrenceIndex; index += 1) {

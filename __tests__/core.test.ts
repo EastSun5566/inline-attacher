@@ -1,8 +1,8 @@
 import {
   describe, it, expect, vi, beforeEach,
 } from 'vitest';
-import { InlineAttachment } from '../core';
-import { Editor, UploadHandlerContext } from '../types';
+import { InlineAttachment } from '../src/core';
+import type { Editor, UploadHandlerContext } from '../src/types';
 
 describe('InlineAttachment', () => {
   let mockEditor: Editor<any>;
