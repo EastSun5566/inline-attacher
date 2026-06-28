@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1](https://github.com/EastSun5566/inline-attachment/compare/v0.1.0...v0.1.1) (2026-06-28)
+
+
+### Bug Fixes
+
+* prevent replace when muti uploads ([e2907a8](https://github.com/EastSun5566/inline-attachment/commit/e2907a8f999bd03e5cfb9dad1831ff12a969c4c6))
+* support relpace selected text ([1731187](https://github.com/EastSun5566/inline-attachment/commit/173118798626f9829245b1915acb2297c02f0cb6))
+
 ## [0.1.0](https://github.com/EastSun5566/inline-attachment/compare/v0.0.8...v0.1.0) (2026-06-28)
 
 
