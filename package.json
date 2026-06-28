@@ -46,16 +46,16 @@
     "url": "https://github.com/EastSun5566/inline-attachment/issues/new"
   },
   "homepage": "https://github.com/EastSun5566/inline-attachment",
-  "packageManager": "pnpm@9.1.0",
+  "packageManager": "pnpm@10.34.4",
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=22"
   },
   "peerDependencies": {
     "@codemirror/view": ">=6.0.0"
   },
   "devDependencies": {
     "@codemirror/state": "^6.4.1",
-    "@types/node": "^20.19.0",
+    "@types/node": "^22.20.0",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
     "eslint": "^8.57.1",
