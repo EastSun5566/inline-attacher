@@ -7,6 +7,26 @@ import {
   type Response,
 } from './utils';
 
+interface UploadPlaceholder {
+  id: symbol
+  text: string
+}
+
+function replaceOccurrence(text: string, searchValue: string, replaceValue: string, occurrenceIndex = 0) {
+  let fromIndex = 0;
+
+  for (let index = 0; index <= occurrenceIndex; index += 1) {
+    const foundIndex = text.indexOf(searchValue, fromIndex);
+    if (foundIndex === -1) return text;
+    if (index === occurrenceIndex) {
+      return text.slice(0, foundIndex) + replaceValue + text.slice(foundIndex + searchValue.length);
+    }
+    fromIndex = foundIndex + searchValue.length;
+  }
+
+  return text;
+}
+
 export class InlineAttachment<TInstance> {
   options = DEFAULT_OPTIONS;
 
@@ -16,13 +36,16 @@ export class InlineAttachment<TInstance> {
 
   lastValue = '';
 
+  private pendingPlaceholders: UploadPlaceholder[] = [];
+
   constructor(editor: Editor<TInstance>, options: Partial<InlineAttachmentOptions>) {
     this.editor = editor;
     this.options = { ...DEFAULT_OPTIONS, ...options };
   }
 
   /** Uploads file */
-  async uploadFile(file: File) {
+  async uploadFile(file: File, placeholder?: string): Promise<void>;
+  async uploadFile(file: File, placeholder?: UploadPlaceholder | string) {
     const {
       defaultExtension,
       remoteFilename,
@@ -36,17 +59,8 @@ export class InlineAttachment<TInstance> {
     } = this.options;
 
     const formData = new FormData();
-    let extension = defaultExtension;
-
-    // Attach the file.
-    // If coming from clipboard, add a default filename (only works in Chrome for now)
-    // http://stackoverflow.com/questions/6664967/how-to-give-a-blob-uploaded-as-formdata-a-file-name
-    if (file.name) {
-      const [fileNameMatched] = file.name.match(/\.(.+)$/) || [];
-      if (fileNameMatched) extension = fileNameMatched;
-    }
-
-    const filename = remoteFilename?.(file) || `image-${Date.now()}.${extension}`;
+    const extension = defaultExtension.replace(/^\./, '');
+    const filename = remoteFilename?.(file) || file.name || `image-${Date.now()}.${extension}`;
     this.filename = filename;
     formData.append(uploadFieldName, file, filename);
 
@@ -65,9 +79,12 @@ export class InlineAttachment<TInstance> {
           formData,
           options: this.options,
         });
-        this.onFileUploadSucceed(response);
+        this.onFileUploadSucceed(response, placeholder as string | undefined, filename);
       } catch (error) {
-        this.onFileUploadError(error instanceof Error ? error : new Error(String(error)));
+        this.onFileUploadError(
+          error instanceof Error ? error : new Error(String(error)),
+          placeholder as string | undefined,
+        );
       }
       return;
     }
@@ -79,11 +96,11 @@ export class InlineAttachment<TInstance> {
       headers: extraHeaders,
     });
     if (!ok) {
-      this.onFileUploadError(value as Error);
+      this.onFileUploadError(value as Error, placeholder as string | undefined);
       return;
     }
 
-    this.onFileUploadSucceed(value as Response);
+    this.onFileUploadSucceed(value as Response, placeholder as string | undefined, filename);
   }
 
   /**
@@ -97,11 +114,21 @@ export class InlineAttachment<TInstance> {
   /**
    * Handles upload response
    */
-  public onFileUploadSucceed(response: Record<string, unknown>) {
+  public onFileUploadSucceed(
+    response: Record<string, unknown>,
+    placeholder?: string,
+    filename?: string,
+  ): void;
+  public onFileUploadSucceed(
+    response: Record<string, unknown>,
+    placeholder?: UploadPlaceholder | string,
+    filename = this.filename,
+  ) {
     const { onFileUploadSucceed, urlText, responseUrlKey } = this.options;
 
     if (!onFileUploadSucceed?.(response)) return;
-    if (!this.lastValue) return;
+    const placeholderText = typeof placeholder === 'string' ? placeholder : placeholder?.text || this.lastValue;
+    if (!placeholderText) return;
 
     const url = (get(response, responseUrlKey) || 'unknown URL') as string;
     if (!url) return;
@@ -110,10 +137,10 @@ export class InlineAttachment<TInstance> {
     const newValue = isFunction(urlText)
       ? urlText(url, response)
       : urlText
-        .replace(urlText.match(pattern)![1], this.filename)
+        .replace(urlText.match(pattern)![1], filename)
         .replace(urlText.match(pattern)![2], url);
 
-    const text = this.editor.getValue().replace(this.lastValue, newValue);
+    const text = this.replacePlaceholder(placeholder, placeholderText, newValue);
     this.editor.setValue(text);
 
     this.options.onFileUploaded?.(url);
@@ -122,31 +149,72 @@ export class InlineAttachment<TInstance> {
   /**
    * Called when a file has failed to upload
    */
-  public onFileUploadError(error: Error) {
+  public onFileUploadError(error: Error, placeholder?: string): void;
+  public onFileUploadError(error: Error, placeholder?: UploadPlaceholder | string) {
     if (!this.options.onFileUploadError?.(error)) return;
-    if (!this.lastValue) return;
+    const placeholderText = typeof placeholder === 'string' ? placeholder : placeholder?.text || this.lastValue;
+    if (!placeholderText) return;
 
-    const text = this.editor.getValue().replace(this.lastValue, this.options.errorText);
+    const text = this.replacePlaceholder(placeholder, placeholderText, this.options.errorText);
     this.editor.setValue(text);
   }
 
   /**
    * Called when a file has been inserted, either by drop or paste
    */
-  public onFileInserted(file: File) {
-    if (!this.options.onFileReceived?.(file)) return;
-
-    this.lastValue = this.options.progressText;
-    this.editor.insertValue(this.lastValue);
+  public onFileInserted(file: File): string | false {
+    const placeholder = this.insertFile(file);
+    if (!placeholder) return false;
+    return placeholder.text;
   }
 
   handleFiles(files: FileList) {
     Array.from(files).forEach((file) => {
       if (!this.isFileAllowed(file)) return;
 
-      this.onFileInserted(file);
-      this.uploadFile(file);
+      const pendingIndex = this.pendingPlaceholders.length;
+      const placeholderText = this.onFileInserted(file);
+      if (!placeholderText) return;
+
+      const placeholder = this.pendingPlaceholders[pendingIndex];
+      this.uploadFile(
+        file,
+        (placeholder?.text === placeholderText ? placeholder : placeholderText) as string,
+      );
     });
+  }
+
+  private insertFile(file: File): UploadPlaceholder | false {
+    if (!this.options.onFileReceived?.(file)) return false;
+
+    const placeholder = {
+      id: Symbol('inline-attacher-placeholder'),
+      text: this.options.progressText,
+    };
+    this.pendingPlaceholders.push(placeholder);
+    this.lastValue = placeholder.text;
+    this.editor.insertValue(placeholder.text);
+
+    return placeholder;
+  }
+
+  private replacePlaceholder(
+    placeholder: UploadPlaceholder | string | undefined,
+    placeholderText: string,
+    newValue: string,
+  ) {
+    const currentText = this.editor.getValue();
+    if (!placeholder || typeof placeholder === 'string') {
+      return currentText.replace(placeholderText, newValue);
+    }
+
+    const placeholderIndex = this.pendingPlaceholders.findIndex(({ id }) => id === placeholder.id);
+    if (placeholderIndex === -1) {
+      return currentText.replace(placeholderText, newValue);
+    }
+
+    this.pendingPlaceholders.splice(placeholderIndex, 1);
+    return replaceOccurrence(currentText, placeholderText, newValue, placeholderIndex);
   }
 
   /**

@@ -68,8 +68,9 @@ describe('InlineAttachment', () => {
       const attachment = new InlineAttachment(mockEditor, { onFileReceived });
       const file = new File([], 'test.png', { type: 'image/png' });
 
-      attachment.onFileInserted(file);
+      const placeholder = attachment.onFileInserted(file);
 
+      expect(placeholder).toBe('![Uploading file...]()');
       expect(onFileReceived).toHaveBeenCalledWith(file);
       expect(mockEditor.insertValue).toHaveBeenCalledWith('![Uploading file...]()');
     });
@@ -79,8 +80,9 @@ describe('InlineAttachment', () => {
       const attachment = new InlineAttachment(mockEditor, { onFileReceived });
       const file = new File([], 'test.png', { type: 'image/png' });
 
-      attachment.onFileInserted(file);
+      const placeholder = attachment.onFileInserted(file);
 
+      expect(placeholder).toBe(false);
       expect(onFileReceived).toHaveBeenCalledWith(file);
       expect(mockEditor.insertValue).not.toHaveBeenCalled();
     });
@@ -245,6 +247,22 @@ describe('InlineAttachment', () => {
       expect(options.body).toBeInstanceOf(FormData);
     });
 
+    it('should use the original filename when file has a name', async () => {
+      (global.fetch as any).mockResolvedValue({
+        ok: true,
+        json: async () => ({ url: 'test.png' }),
+      });
+
+      const attachment = new InlineAttachment(mockEditor, {});
+      attachment.lastValue = '![Uploading file...]()';
+      (mockEditor.getValue as any).mockReturnValue('![Uploading file...]()');
+
+      const file = new File([], 'test.png', { type: 'image/png' });
+      await attachment.uploadFile(file);
+
+      expect(attachment.filename).toBe('test.png');
+    });
+
     it('should set filename with timestamp when file has no name', async () => {
       (global.fetch as any).mockResolvedValue({
         ok: true,
@@ -259,6 +277,7 @@ describe('InlineAttachment', () => {
       await attachment.uploadFile(file);
 
       expect(attachment.filename).toMatch(/^image-\d+\.png$/);
+      expect(attachment.filename).not.toContain('..');
     });
 
     it('should use custom remoteFilename function', async () => {
@@ -318,7 +337,6 @@ describe('InlineAttachment', () => {
       const attachment = new InlineAttachment(mockEditor, {
         uploadFieldName: 'image',
         extraParams: { token: 'abc' },
-        remoteFilename: () => 'test.png',
         uploadHandler,
       });
       attachment.lastValue = '![Uploading file...]()';
@@ -345,7 +363,8 @@ describe('InlineAttachment', () => {
       await attachment.uploadFile(file);
 
       expect(global.fetch).not.toHaveBeenCalled();
-      expect(onFileUploadError).toHaveBeenCalledWith(expect.any(Error));
+      expect(onFileUploadError).toHaveBeenCalled();
+      expect(onFileUploadError.mock.calls[0][0]).toBeInstanceOf(Error);
       expect(onFileUploadError.mock.calls[0][0].message).toBe('Upload failed');
     });
 
@@ -420,6 +439,68 @@ describe('InlineAttachment', () => {
 
       expect(onFileInserted).toHaveBeenCalledTimes(1);
       expect(uploadFile).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not upload when onFileReceived returns false', () => {
+      const attachment = new InlineAttachment(mockEditor, {
+        onFileReceived: () => false,
+      });
+      const uploadFile = vi.spyOn(attachment, 'uploadFile');
+
+      const files = [
+        new File([], 'test.png', { type: 'image/png' }),
+      ] as any as FileList;
+
+      attachment.handleFiles(files);
+
+      expect(mockEditor.insertValue).not.toHaveBeenCalled();
+      expect(uploadFile).not.toHaveBeenCalled();
+    });
+
+    it('should replace the matching placeholder when uploads finish out of order', async () => {
+      let text = '';
+      const setText = vi.fn((value: string) => {
+        text = value;
+      });
+      mockEditor.getValue = vi.fn(() => text);
+      mockEditor.setValue = setText;
+      mockEditor.insertValue = vi.fn((value: string) => {
+        text += value;
+      });
+
+      let resolveFirst!: (value: Record<string, unknown>) => void;
+      let resolveSecond!: (value: Record<string, unknown>) => void;
+      const uploadHandler = vi.fn(({ file }: UploadHandlerContext) => new Promise<Record<string, unknown>>((resolve) => {
+        if (file.name === 'first.png') {
+          resolveFirst = resolve;
+        } else {
+          resolveSecond = resolve;
+        }
+      }));
+      const attachment = new InlineAttachment(mockEditor, { uploadHandler });
+
+      const files = [
+        new File([], 'first.png', { type: 'image/png' }),
+        new File([], 'second.png', { type: 'image/png' }),
+      ] as any as FileList;
+
+      attachment.handleFiles(files);
+
+      expect(text).toBe('![Uploading file...]()![Uploading file...]()');
+
+      resolveSecond({ url: 'https://example.com/second.png' });
+      await Promise.resolve();
+
+      expect(text).toBe(
+        '![Uploading file...]()![second.png](https://example.com/second.png)',
+      );
+
+      resolveFirst({ url: 'https://example.com/first.png' });
+      await Promise.resolve();
+
+      expect(text).toBe(
+        '![first.png](https://example.com/first.png)![second.png](https://example.com/second.png)',
+      );
     });
   });
 
