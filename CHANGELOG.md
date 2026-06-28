@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.1.0](https://github.com/EastSun5566/inline-attachment/compare/v0.0.8...v0.1.0) (2026-06-28)
+
+
+### Features
+
+* add custom upload handler ([d665dd5](https://github.com/EastSun5566/inline-attachment/commit/d665dd56b12a0d0180fa5017722b6a7fe9c4c429))
+* **playground:** update ui ([8e2501f](https://github.com/EastSun5566/inline-attachment/commit/8e2501f243085f5ea2c41e361e2fbcda11731580))
+
 ### [0.0.8](https://github.com/EastSun5566/inline-attachment/compare/v0.0.7...v0.0.8) (2024-10-13)
 
 
